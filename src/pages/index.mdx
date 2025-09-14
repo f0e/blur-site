@@ -1,0 +1,58 @@
+---
+layout: ../layouts/Layout.astro
+title: Blur
+---
+
+# Blur
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/adc158b9-8ec4-4e5a-b372-ed1fad9d8d61" width="30%" />
+  <img src="https://github.com/user-attachments/assets/eebbac0d-6fa1-42ed-beeb-e85ea93838b6" width="30%" />
+  <img src="https://github.com/user-attachments/assets/e8b749dc-9232-4e45-93b4-8df2e3854ffb" width="30%" />
+</p>
+
+[![Downloads](https://img.shields.io/github/downloads/f0e/blur/total?label=Downloads)](https://github.com/f0e/blur/releases/latest) [![Discord](https://img.shields.io/discord/1392389164153962640?style=flat&label=Discord)](https://discord.gg/B5BK9GMN87)
+
+Blur is a native desktop application made for easily and efficiently adding motion blur to videos through frame blending, with the ability to utilise frame interpolation and more.
+
+Join the [Discord](https://discord.gg/B5BK9GMN87) to share your configs, render tests and ask the community for help.
+
+## Download
+
+- [Windows installer](https://github.com/f0e/blur/releases/latest/download/blur-Windows-Installer-x64.exe)
+- [macOS installer](https://github.com/f0e/blur/releases/latest/download/blur-macOS-Release-arm64.dmg)
+- [Linux (requires manual installation of dependencies)](https://github.com/f0e/blur/releases/latest/download/blur-Linux-Release-x64.tar.gz)
+
+### Beta releases
+
+I often release beta versions with new functionality before I think they're stable enough for a proper release. To test these releases, [visit the Releases tab of the repo.](https://github.com/f0e/blur/releases) To receive beta update notifications you can enable `include beta updates` in your `blur.cfg` found in your config folder. Any feedback or issue reporting on these releases is greatly appreciated :)
+
+### macOS notes
+
+> After opening on Mac for the first time you'll get a 'Blur is damaged and can't be opened.' error. To fix this, run `xattr -dr com.apple.quarantine /Applications/blur.app` in Terminal to unquarantine it.\*
+
+> The default interpolation program on macOS is RIFE, unlike Windows and Linux. RIFE is more accurate than SVP, but quite a bit slower. The reason for this difference is because because using SVP for interpolation on macOS requires that [SVP Manager](https://www.svp-team.com/get/) be running, or you'll get a red border around videos. (This software is paid, and not affiliated with Blur)
+
+### Linux notes
+
+Requires manual installation of dependencies. [See here for the list of dependencies.](#linux-dependency-requirements)
+
+## Features
+
+The amount of motion blur is easily configurable, and there are additional options to enable other features such as interpolating the video's fps. This can be used to generate 'fake' motion blur through frame blending the interpolated footage. This motion blur does not blur non-moving parts of the video, like the HUD in gameplay footage.
+
+The program can also be used in the command line via `blur-cli`, use -h or --help for more information.
+
+## Sample output
+
+### 600fps footage, blurred with 0.6 blur amount
+
+![600fps footage, blurred with 0.6 blur amount](https://i.imgur.com/Hk0XIPe.jpg)
+
+### 60fps footage, interpolated to 600fps, blurred with 0.6 blur amount
+
+![60fps footage, interpolated to 600fps, blurred with 0.6 blur amount](https://i.imgur.com/I4QFWGc.jpg)
+
+As visible from these images, the interpolated 60fps footage produces motion blur that is comparable to actual 600fps footage.
+
+---

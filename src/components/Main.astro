@@ -1,0 +1,67 @@
+---
+import Navbar from "./Navbar.astro";
+
+const routes = [
+  { href: "/", label: "home" },
+  { href: "/config", label: "config" },
+  { href: "/recommendations", label: "recommendations" },
+  { href: "/linux", label: "linux" },
+];
+
+const animDuration = "0.4s";
+
+const anim = {
+  old: {
+    name: "motion-blur-out",
+    duration: animDuration,
+  },
+  new: {
+    name: "motion-blur-in",
+    duration: animDuration,
+  },
+};
+
+const customTransition = {
+  forwards: anim,
+  backwards: anim,
+};
+---
+
+<Navbar class="font-serif" routes={routes} />
+
+<main class="prose p-8 mx-auto" transition:animate={customTransition}>
+  <slot />
+</main>
+
+<style>
+  :root {
+    --anim-distance: 20px;
+    --blur-amount: 8px;
+  }
+
+  @keyframes motion-blur-in {
+    0% {
+      opacity: 0;
+      transform: translateX(var(--anim-distance));
+      filter: blur(var(--blur-amount));
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes motion-blur-out {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+      filter: blur(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(calc(-1 * var(--anim-distance)));
+      filter: blur(var(--blur-amount));
+    }
+  }
+</style>

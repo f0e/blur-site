@@ -1,0 +1,45 @@
+---
+layout: ../layouts/Layout.astro
+title: Blur
+---
+
+# Recommendations
+
+## Recommended settings for gameplay footage:
+
+Most of the default settings are what I find work the best, but some settings can depend on your preferences.
+
+### Blur amount
+
+For 60fps footage:
+
+| intent                  | amount  |
+| ----------------------- | ------- |
+| Maximum blur/smoothness | >1      |
+| Normal blur             | 1       |
+| Medium blur             | 0.5     |
+| Low blur                | 0.2-0.3 |
+
+To preserve your old blur amount when changing framerate use the following formula:
+
+`[new blur amount] = [old blur amount] × ([new fps] / [old fps])`
+
+So normal blur at 30fps becomes 0.5, etc.
+
+### Interpolated fps
+
+Results can become worse if this is too high. In general I recommend around 5x the input fps. Also SVP seems to only be able to interpolate up to 10x the input fps, so don't bother trying anything higher than that.
+
+## Notes
+
+### Limiting smearing
+
+Using blur on 60fps footage results in clean motion blur, but occasionally leaves some smearing artifacts. To remove these artifacts, higher framerate source footage can be used. Recording with software such as OBS at framerates like 120/180fps will result in a greatly reduced amount of artifacting.
+
+### Preventing unsmooth output
+
+If your footage contains duplicate frames then occasionally blurred frames will look out of place, making the video seem unsmooth at points. The 'deduplicate' option will automatically fill in duplicated frames with interpolated frames to prevent this from happening.
+
+### Frameserver output
+
+Blur supports rendering from frameservers. This means you can avoid having to run blur on your input videos when video editing. When rendering, simply output (make sure your project is high framerate) to the frameserver and then drag the generated AVI into blur. Note that some video editing software might limit the maximum project framerate.
