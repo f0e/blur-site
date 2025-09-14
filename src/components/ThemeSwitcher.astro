@@ -6,29 +6,17 @@
 </div>
 
 <script is:inline>
-  function applyTheme() {
-    document.documentElement.classList.toggle(
-      "dark",
-      localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-    );
-
+  function updateLabel() {
     const themeElem = document.getElementById("theme-text");
     const themeLabel = localStorage.theme ?? "system";
     themeElem.textContent = themeLabel;
   }
 
-  applyTheme();
+  updateLabel();
 </script>
 
 <script>
   type Theme = "system" | "dark" | "light";
-
-  const html = document.documentElement;
-
-  const themeElem = document.getElementById("theme-text");
-  const themeToggle = document.getElementById("theme-toggle");
 
   function setTheme(theme: Theme) {
     console.log("changed theme to ", theme);
@@ -39,15 +27,25 @@
     }
 
     applyTheme();
+    updateLabel();
   }
 
-  applyTheme();
+  document.addEventListener("astro:after-swap", () => {
+    applyTheme();
+    updateLabel();
 
-  // Cycle through themes on click
-  themeToggle.addEventListener("click", () => {
-    const current = localStorage.theme || "system";
-    const next =
-      current === "system" ? "light" : current === "light" ? "dark" : "system";
-    setTheme(next);
+    const themeToggle = document.getElementById("theme-toggle");
+    if (themeToggle && !themeToggle.hasAttribute("onclick")) {
+      themeToggle.addEventListener("click", () => {
+        const current = localStorage.theme || "system";
+        const next =
+          current === "system"
+            ? "light"
+            : current === "light"
+              ? "dark"
+              : "system";
+        setTheme(next);
+      });
+    }
   });
 </script>

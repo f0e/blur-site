@@ -12,5 +12,18 @@ import { ClientRouter } from "astro:transitions";
 
   <title>Blur</title>
 
+  <script is:inline>
+    function applyTheme() {
+      document.documentElement.classList.toggle(
+        "dark",
+        localStorage.theme === "dark" ||
+          (!("theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+      );
+    }
+
+    applyTheme();
+  </script>
+
   <ClientRouter />
 </head>
