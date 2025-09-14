@@ -5,13 +5,38 @@ title: Blur
 
 # Blur
 
-<div class="flex overflow-scroll">
-  <img src="https://github.com/user-attachments/assets/adc158b9-8ec4-4e5a-b372-ed1fad9d8d61" class="w-full max-w-128" />
-  <img src="https://github.com/user-attachments/assets/eebbac0d-6fa1-42ed-beeb-e85ea93838b6" class="w-full max-w-128" />
-  <img src="https://github.com/user-attachments/assets/e8b749dc-9232-4e45-93b4-8df2e3854ffb" class="w-full max-w-128" />
+<div class="not-prose flex overflow-scroll">
+  {" "}
+  {/* todo: not-prose is ugly here, probably just disable image margins globally */}
+  <img
+    src="https://github.com/user-attachments/assets/adc158b9-8ec4-4e5a-b372-ed1fad9d8d61"
+    class="w-full max-w-128"
+  />
+  <img
+    src="https://github.com/user-attachments/assets/eebbac0d-6fa1-42ed-beeb-e85ea93838b6"
+    class="w-full max-w-128"
+  />
+  <img
+    src="https://github.com/user-attachments/assets/e8b749dc-9232-4e45-93b4-8df2e3854ffb"
+    class="w-full max-w-128"
+  />
 </div>
 
-[![Downloads](https://img.shields.io/github/downloads/f0e/blur/total?label=Downloads)](https://github.com/f0e/blur/releases/latest) [![Discord](https://img.shields.io/discord/1392389164153962640?style=flat&label=Discord)](https://discord.gg/B5BK9GMN87)
+<div class="not-prose flex flex-row gap-2">
+<a href="https://github.com/f0e/blur/releases/latest">
+  <img
+    src="https://img.shields.io/github/downloads/f0e/blur/total?label=Downloads"
+    alt="Downloads"
+  />
+</a>
+
+<a href="https://discord.gg/B5BK9GMN87">
+  <img
+    src="https://img.shields.io/discord/1392389164153962640?style=flat&amp;label=Discord"
+    alt="Discord"
+  />
+</a>
+</div>
 
 Blur is a native desktop application made for easily and efficiently adding motion blur to videos through frame blending, with the ability to utilise frame interpolation and more.
 
@@ -42,15 +67,3 @@ Requires manual installation of dependencies. [See here for the list of dependen
 The amount of motion blur is easily configurable, and there are additional options to enable other features such as interpolating the video's fps. This can be used to generate 'fake' motion blur through frame blending the interpolated footage. This motion blur does not blur non-moving parts of the video, like the HUD in gameplay footage.
 
 The program can also be used in the command line via `blur-cli`, use -h or --help for more information.
-
-{/* ## Sample output
-
-### 600fps footage, blurred with 0.6 blur amount
-
-![600fps footage, blurred with 0.6 blur amount](https://i.imgur.com/Hk0XIPe.jpg)
-
-### 60fps footage, interpolated to 600fps, blurred with 0.6 blur amount
-
-![60fps footage, interpolated to 600fps, blurred with 0.6 blur amount](https://i.imgur.com/I4QFWGc.jpg)
-
-As visible from these images, the interpolated 60fps footage produces motion blur that is comparable to actual 600fps footage. */}
