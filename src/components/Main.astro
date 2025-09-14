@@ -27,11 +27,18 @@ const customTransition = {
 };
 ---
 
-<Navbar class="font-serif" routes={routes} />
+<body
+  class="flex flex-col sm:flex-row justify-center gap-10 p-8 bg-white text-black dark:bg-black dark:text-white"
+>
+  <Navbar class="font-serif text-left sm:text-right" routes={routes} />
 
-<main class="prose p-8 mx-auto" transition:animate={customTransition}>
-  <slot />
-</main>
+  <main
+    class="prose dark:prose-invert shrink"
+    transition:animate={customTransition}
+  >
+    <slot />
+  </main>
+</body>
 
 <style>
   :root {
