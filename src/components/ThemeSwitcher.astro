@@ -19,7 +19,6 @@
   type Theme = "system" | "dark" | "light";
 
   function setTheme(theme: Theme) {
-    console.log("changed theme to ", theme);
     if (theme == "system") {
       localStorage.removeItem("theme");
     } else {
@@ -30,22 +29,30 @@
     updateLabel();
   }
 
+  function registerEvents() {
+    const themeToggle = document.getElementById("theme-toggle");
+
+    if (!themeToggle || themeToggle.hasAttribute("onclick")) {
+      return;
+    }
+
+    themeToggle.addEventListener("click", () => {
+      const current = localStorage.theme || "system";
+      const next =
+        current === "system"
+          ? "light"
+          : current === "light"
+            ? "dark"
+            : "system";
+      setTheme(next);
+    });
+  }
+
   document.addEventListener("astro:after-swap", () => {
     applyTheme();
     updateLabel();
-
-    const themeToggle = document.getElementById("theme-toggle");
-    if (themeToggle && !themeToggle.hasAttribute("onclick")) {
-      themeToggle.addEventListener("click", () => {
-        const current = localStorage.theme || "system";
-        const next =
-          current === "system"
-            ? "light"
-            : current === "light"
-              ? "dark"
-              : "system";
-        setTheme(next);
-      });
-    }
+    registerEvents();
   });
+
+  registerEvents();
 </script>
