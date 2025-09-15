@@ -52,19 +52,9 @@ const customTransition = {
       transform: translateX(var(--anim-distance));
       filter: blur(var(--blur-amount));
     }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-      filter: blur(0);
-    }
   }
 
   @keyframes motion-blur-out {
-    0% {
-      opacity: 1;
-      transform: translateX(0);
-      filter: blur(0);
-    }
     100% {
       opacity: 0;
       transform: translateX(calc(-1 * var(--anim-distance)));
