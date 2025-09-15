@@ -3,7 +3,9 @@ layout: ../layouts/Layout.astro
 title: Blur
 ---
 
-import Slider from "../components/Carousel.astro";
+import { Image } from "astro:assets";
+
+import Carousel from "../components/Carousel.astro";
 
 import homeImage from "../assets/home.png";
 import configImage from "../assets/config.png";
@@ -11,7 +13,7 @@ import renderImage from "../assets/render.png";
 
 # Blur
 
-<Slider
+<Carousel
   slides={[
     {
       image: homeImage,
@@ -23,21 +25,29 @@ import renderImage from "../assets/render.png";
       image: renderImage,
     },
   ]}
+  eager={true}
 />
 
 <div class="not-prose flex flex-row gap-2">
 <a href="https://github.com/f0e/blur/releases/latest">
-  <img
+  <Image
     src="https://img.shields.io/github/downloads/f0e/blur/total?label=Downloads"
     alt="Downloads"
+    width="120"
+    height="20"
+    loading="eager"
   />
 </a>
 
 <a href="https://discord.gg/B5BK9GMN87">
-  <img
+  <Image
     src="https://img.shields.io/discord/1392389164153962640?style=flat&amp;label=Discord"
     alt="Discord"
-  />
+    width="130"
+    height="20"
+    loading="eager"
+/>
+
 </a>
 </div>
 

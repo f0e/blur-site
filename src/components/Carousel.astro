@@ -5,10 +5,13 @@ interface Slide {
   image: ImageMetadata;
   caption?: string;
 }
+
 interface Props {
   slides: Slide[];
+  eager: boolean;
 }
-const { slides } = Astro.props;
+
+const { slides, eager } = Astro.props;
 
 const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
 ---
@@ -41,6 +44,7 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
               class="not-prose fade-in"
               src={slide.image}
               alt={slide.caption ?? ""}
+              loading={index == 0 && eager ? "eager" : "lazy"}
             />
 
             {slide.caption && (
