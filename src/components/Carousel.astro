@@ -1,0 +1,110 @@
+---
+interface Slide {
+  image: string;
+  caption?: string;
+}
+interface Props {
+  slides: Slide[];
+}
+const { slides } = Astro.props;
+---
+
+<style>
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<div class="mb-4">
+  <div
+    class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory [-webkit-overflow-scrolling:touch] hide-scrollbar
+    mask-x-from-95%"
+    id="carousel"
+  >
+    {
+      slides.map((slide, index) => {
+        return (
+          <div
+            class="snap-start flex-shrink-0 w-full rounded-lg
+              relative flex items-center justify-center overflow-hidden"
+            data-slide={index}
+          >
+            <img class="not-prose" src={slide.image} alt={slide.caption} />
+            {slide.caption && (
+              <p class="absolute bottom-0 px-2 bg-black/50 text-white dark:bg-white/50 dark:text-black">
+                {slide.caption}
+              </p>
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <!-- Dot indicators -->
+  <div class="flex justify-center mt-4 space-x-2">
+    {
+      slides.map((_, index) => (
+        <button
+          class="w-2 h-2 rounded-full bg-gray-300 cursor-pointer dot"
+          data-slide={index}
+          aria-label={`Go to slide ${index + 1}`}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<script is:inline>
+  const ACTIVE_COLOUR = "bg-green-400";
+  const INACTIVE_COLOUR = "bg-gray-300";
+
+  const carousel = document.getElementById("carousel");
+  const dots = document.querySelectorAll(".dot");
+
+  let first = true;
+
+  function updateActiveDot() {
+    if (!first) {
+      // transition if its not the initial update
+      dots.forEach((dot) => dot.classList.add("duration-300"));
+    } else {
+      first = false;
+    }
+
+    if (!carousel) return;
+
+    const scrollLeft = carousel.scrollLeft;
+    const slideWidth = carousel.clientWidth;
+    const activeIndex = Math.round(scrollLeft / slideWidth);
+
+    dots.forEach((dot, index) => {
+      if (index === activeIndex) {
+        dot.classList.add(ACTIVE_COLOUR, "w-6");
+        dot.classList.remove(INACTIVE_COLOUR, "w-2");
+      } else {
+        dot.classList.add(INACTIVE_COLOUR, "w-2");
+        dot.classList.remove(ACTIVE_COLOUR, "w-6");
+      }
+    });
+  }
+
+  updateActiveDot();
+</script>
+
+<script>
+  dots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      if (carousel) {
+        const slideWidth = carousel.clientWidth;
+        carousel.scrollTo({ left: slideWidth * index, behavior: "smooth" });
+      }
+    });
+  });
+
+  carousel?.addEventListener("scroll", updateActiveDot);
+</script>

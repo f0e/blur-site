@@ -3,23 +3,26 @@ layout: ../layouts/Layout.astro
 title: Blur
 ---
 
+import Slider from "../components/Carousel.astro";
+
 # Blur
 
-<div class="not-prose flex overflow-scroll">
-  {/* todo: not-prose is ugly here, probably just disable image margins globally */}
-  <img
-    src="https://github.com/user-attachments/assets/adc158b9-8ec4-4e5a-b372-ed1fad9d8d61"
-    class="w-full max-w-128"
-  />
-  <img
-    src="https://github.com/user-attachments/assets/eebbac0d-6fa1-42ed-beeb-e85ea93838b6"
-    class="w-full max-w-128"
-  />
-  <img
-    src="https://github.com/user-attachments/assets/e8b749dc-9232-4e45-93b4-8df2e3854ffb"
-    class="w-full max-w-128"
-  />
-</div>
+<Slider
+  slides={[
+    {
+      image:
+        "https://github.com/user-attachments/assets/adc158b9-8ec4-4e5a-b372-ed1fad9d8d61",
+    },
+    {
+      image:
+        "https://github.com/user-attachments/assets/eebbac0d-6fa1-42ed-beeb-e85ea93838b6",
+    },
+    {
+      image:
+        "https://github.com/user-attachments/assets/e8b749dc-9232-4e45-93b4-8df2e3854ffb",
+    },
+  ]}
+/>
 
 <div class="not-prose flex flex-row gap-2">
 <a href="https://github.com/f0e/blur/releases/latest">
