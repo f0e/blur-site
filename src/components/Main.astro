@@ -47,7 +47,7 @@ const customTransition = {
   }
 
   @keyframes motion-blur-in {
-    0% {
+    from {
       opacity: 0;
       transform: translateX(var(--anim-distance));
       filter: blur(var(--blur-amount));
@@ -55,7 +55,7 @@ const customTransition = {
   }
 
   @keyframes motion-blur-out {
-    100% {
+    to {
       opacity: 0;
       transform: translateX(calc(-1 * var(--anim-distance)));
       filter: blur(var(--blur-amount));
