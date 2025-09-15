@@ -4,13 +4,13 @@
     "": {
       "name": "proj",
       "dependencies": {
-        "@astrojs/mdx": "^4.3.5",
-        "@tailwindcss/vite": "^4.1.13",
-        "astro": "^5.13.7",
-        "tailwindcss": "^4.1.13",
+        "@astrojs/mdx": "4.3.5",
+        "@tailwindcss/vite": "4.1.13",
+        "astro": "5.13.7",
+        "tailwindcss": "4.1.13",
       },
       "devDependencies": {
-        "@tailwindcss/typography": "^0.5.16",
+        "@tailwindcss/typography": "0.5.16",
       },
     },
   },
