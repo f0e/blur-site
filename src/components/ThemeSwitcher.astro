@@ -1,15 +1,13 @@
 <div class="theme-switcher not-sm:text-xl">
   <p class="opacity-50">theme</p>
-  <button id="theme-toggle" class="cursor-pointer">
-    <a id="theme-text" class="underline">system</a>
-  </button>
+  <button id="theme-toggle" class="underline cursor-pointer"></button>
 </div>
 
 <script is:inline>
   function updateLabel() {
-    const themeElem = document.getElementById("theme-text");
+    const elem = document.getElementById("theme-toggle");
     const themeLabel = localStorage.theme ?? "system";
-    themeElem.textContent = themeLabel;
+    elem.textContent = themeLabel;
   }
 
   updateLabel();
