@@ -126,14 +126,24 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
   declare const dots: NodeListOf<HTMLElement>;
   declare function updateActiveDot(): void;
 
-  dots.forEach((dot, index) => {
-    dot.addEventListener("click", () => {
-      if (carousel) {
+  function registerEvents() {
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        if (!carousel) {
+          return;
+        }
+
         const slideWidth = carousel.clientWidth;
         carousel.scrollTo({ left: slideWidth * index, behavior: "smooth" });
-      }
+      });
     });
+
+    carousel?.addEventListener("scroll", updateActiveDot);
+  }
+
+  document.addEventListener("astro:after-swap", () => {
+    registerEvents();
   });
 
-  carousel?.addEventListener("scroll", updateActiveDot);
+  registerEvents();
 </script>
