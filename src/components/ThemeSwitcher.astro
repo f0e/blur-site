@@ -35,11 +35,7 @@
   function registerEvents() {
     const themeToggle = document.getElementById("theme-toggle");
 
-    if (!themeToggle || themeToggle.hasAttribute("onclick")) {
-      return;
-    }
-
-    themeToggle.addEventListener("click", () => {
+    themeToggle?.addEventListener("click", () => {
       const current = localStorage.theme || "system";
       const next =
         current === "system"
