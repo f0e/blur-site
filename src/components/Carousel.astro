@@ -1,12 +1,16 @@
 ---
+import { Image } from "astro:assets";
+
 interface Slide {
-  image: string;
+  image: ImageMetadata;
   caption?: string;
 }
 interface Props {
   slides: Slide[];
 }
 const { slides } = Astro.props;
+
+const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
 ---
 
 <style>
@@ -21,8 +25,8 @@ const { slides } = Astro.props;
 
 <div class="mb-4">
   <div
-    class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory [-webkit-overflow-scrolling:touch] hide-scrollbar
-    mask-x-from-95%"
+    class=`flex overflow-x-auto scroll-smooth snap-x snap-mandatory [-webkit-overflow-scrolling:touch] hide-scrollbar
+    mask-x-from-95% h-[${maxHeight}px]`
     id="carousel"
   >
     {
@@ -33,7 +37,12 @@ const { slides } = Astro.props;
               relative flex items-center justify-center overflow-hidden"
             data-slide={index}
           >
-            <img class="not-prose" src={slide.image} alt={slide.caption} />
+            <Image
+              class="not-prose fade-in"
+              src={slide.image}
+              alt={slide.caption ?? ""}
+            />
+
             {slide.caption && (
               <p class="absolute bottom-0 px-2 bg-black/50 text-white dark:bg-white/50 dark:text-black">
                 {slide.caption}
@@ -58,6 +67,22 @@ const { slides } = Astro.props;
     }
   </div>
 </div>
+
+<script is:inline>
+  const images = document.querySelectorAll(".fade-in");
+
+  images.forEach((img) => {
+    if (!img.complete || img.naturalWidth === 0) {
+      // not already loaded, fade in
+      img.classList.add("opacity-0");
+
+      img.addEventListener("load", () => {
+        img.classList.add("transition-opacity", "duration-300");
+        img.classList.remove("opacity-0");
+      });
+    }
+  });
+</script>
 
 <script is:inline>
   const ACTIVE_COLOUR = "bg-green-400";
@@ -97,6 +122,10 @@ const { slides } = Astro.props;
 </script>
 
 <script>
+  declare const carousel: HTMLElement | null;
+  declare const dots: NodeListOf<HTMLElement>;
+  declare function updateActiveDot(): void;
+
   dots.forEach((dot, index) => {
     dot.addEventListener("click", () => {
       if (carousel) {
