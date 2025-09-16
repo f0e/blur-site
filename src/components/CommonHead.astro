@@ -11,19 +11,36 @@ import { ClientRouter } from "astro:transitions";
   <meta name="generator" content={Astro.generator} />
 
   <title>Blur</title>
-  <meta name="description" content="Blur is a native desktop application made for easily and efficiently adding motion blur to videos through frame blending.">
+  <meta
+    name="description"
+    content="Blur is a native desktop application made for easily and efficiently adding motion blur to videos through frame blending."
+  />
 
   <script is:inline>
-    function applyTheme() {
-      document.documentElement.classList.toggle(
-        "dark",
-        localStorage.theme === "dark" ||
-          (!("theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-      );
-    }
+    window.ThemeProvider = (() => {
+      const applyTheme = () => {
+        document.documentElement.classList.toggle(
+          "dark",
+          localStorage.theme === "dark" ||
+            (!("theme" in localStorage) &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches)
+        );
+      };
 
-    applyTheme();
+      const updateLabel = () => {
+        const elem = document.getElementById("theme-toggle");
+        if (!elem) return;
+        const themeLabel = localStorage.theme ?? "system";
+        elem.textContent = themeLabel;
+      };
+
+      applyTheme();
+
+      return {
+        applyTheme,
+        updateLabel,
+      };
+    })();
   </script>
 
   <ClientRouter />

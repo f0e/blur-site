@@ -1,21 +1,20 @@
-<div class="theme-switcher not-sm:text-xl">
+<div id="theme-switcher" class="hidden not-sm:text-xl">
   <p class="opacity-50">theme</p>
   <button id="theme-toggle" class="underline cursor-pointer"></button>
 </div>
 
-<script is:inline>
-  function updateLabel() {
-    const elem = document.getElementById("theme-toggle");
-    const themeLabel = localStorage.theme ?? "system";
-    elem.textContent = themeLabel;
-  }
-
-  updateLabel();
-</script>
-
 <script>
-  declare function applyTheme(): void;
-  declare function updateLabel(): void;
+  /* i'd love to not have to do this, and to inline updateLabel so it updates instantly,
+  but that apparently stops the rest of the site from rendering??
+
+  for proof, add this above, reload lots of times and watch the layout shift:
+
+  <script is:inline>
+    // literally nothing
+  < /script>
+  */
+  document.querySelector("#theme-switcher")?.classList.remove("hidden");
+  window.ThemeProvider.updateLabel();
 
   type Theme = "system" | "dark" | "light";
 
@@ -26,8 +25,8 @@
       localStorage.theme = theme;
     }
 
-    applyTheme();
-    updateLabel();
+    window.ThemeProvider.applyTheme();
+    window.ThemeProvider.updateLabel();
   }
 
   function registerEvents() {
@@ -46,8 +45,8 @@
   }
 
   document.addEventListener("astro:after-swap", () => {
-    applyTheme();
-    updateLabel();
+    window.ThemeProvider.applyTheme();
+    window.ThemeProvider.updateLabel();
     registerEvents();
   });
 
