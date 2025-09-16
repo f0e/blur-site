@@ -8,14 +8,12 @@ export interface Route {
 
 interface Props {
   routes: Route[];
-  class?: string;
   discordUrl?: string;
   githubUrl?: string;
 }
 
 const {
   routes,
-  class: classes = "",
   discordUrl = "https://discord.gg/B5BK9GMN87",
   githubUrl = "https://github.com/f0e/blur",
 } = Astro.props;
@@ -30,7 +28,8 @@ const currentPath = normalisePath(Astro.url.pathname);
 ---
 
 <nav
-  class={`${classes} shrink-0 flex flex-col gap-4 sticky top-6 self-start text-sm not-sm:text-xl`}
+  class="font-mono text-left sm:text-right text-sm not-sm:text-xl
+  shrink-0 flex flex-col gap-4 sm:sticky sm:top-6 self-start"
   {/* account for bold text getting bigger */}
   style={`width: calc(${longestRouteLength}ch + 5px)`}
 >
