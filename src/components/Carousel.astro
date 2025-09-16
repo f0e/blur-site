@@ -92,12 +92,12 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
   const ACTIVE_COLOUR = "bg-green-400";
   const INACTIVE_COLOUR = "bg-gray-300";
 
-  const carousel = document.getElementById("carousel");
-  const dots = document.querySelectorAll(".dot");
-
   let first = true;
 
   function updateActiveDot() {
+    const carousel = document.getElementById("carousel");
+    const dots = document.querySelectorAll(".dot");
+
     if (!first) {
       // transition if its not the initial update
       dots.forEach((dot) => dot.classList.add("duration-300"));
@@ -126,11 +126,14 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
 </script>
 
 <script>
-  declare const carousel: HTMLElement | null;
-  declare const dots: NodeListOf<HTMLElement>;
   declare function updateActiveDot(): void;
 
+  let first = true;
+
   function registerEvents() {
+    const carousel = document.getElementById("carousel");
+    const dots = document.querySelectorAll(".dot");
+
     dots.forEach((dot, index) => {
       dot.addEventListener("click", () => {
         if (!carousel) {
@@ -147,6 +150,9 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
 
   document.addEventListener("astro:after-swap", () => {
     registerEvents();
+
+    first = true;
+    updateActiveDot();
   });
 
   registerEvents();
