@@ -1,10 +1,12 @@
 [tools]
 bun = "latest"
 node = "latest"
+"pipx:pre-commit" = "latest"
 
 [tasks.setup]
 run = """
 bun install
+pre-commit install
 """
 
 [tasks.dev]
