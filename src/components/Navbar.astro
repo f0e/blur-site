@@ -17,7 +17,7 @@ const longestRouteLength = Math.max(
   ...routes.map((route) => route.label.length)
 );
 
-const normalisePath = (path: string) => path.replace(/\/$/, '') || '/';
+const normalisePath = (path: string) => path.replace(/\/$/, "") || "/";
 
 const currentPath = normalisePath(Astro.url.pathname);
 ---
