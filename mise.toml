@@ -1,3 +1,17 @@
 [tools]
 bun = "latest"
 node = "latest"
+
+[tasks.setup]
+run = """
+bun install
+"""
+
+[tasks.dev]
+run = "bun run astro dev"
+
+[tasks.build]
+run = "bun run astro build"
+
+[tasks.preview]
+run = "bun run astro preview"
