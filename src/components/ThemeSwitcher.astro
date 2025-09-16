@@ -13,8 +13,11 @@
     // literally nothing
   < /script>
   */
-  document.querySelector("#theme-switcher")?.classList.remove("hidden");
-  window.ThemeProvider.updateLabel();
+  function init() {
+    document.querySelector("#theme-switcher")?.classList.remove("hidden");
+    window.ThemeProvider.updateLabel();
+    registerEvents();
+  }
 
   type Theme = "system" | "dark" | "light";
 
@@ -46,9 +49,8 @@
 
   document.addEventListener("astro:after-swap", () => {
     window.ThemeProvider.applyTheme();
-    window.ThemeProvider.updateLabel();
-    registerEvents();
+    init();
   });
 
-  registerEvents();
+  init();
 </script>
