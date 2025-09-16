@@ -1,6 +1,6 @@
-<div id="theme-switcher" class="hidden">
+<div id="theme-switcher">
   <p class="opacity-50">theme</p>
-  <button id="theme-toggle" class="underline cursor-pointer"></button>
+  <button id="theme-toggle" class="underline cursor-pointer">system</button>
 </div>
 
 <script>
@@ -14,7 +14,6 @@
   < /script>
   */
   function init() {
-    document.querySelector("#theme-switcher")?.classList.remove("hidden");
     window.ThemeProvider.updateLabel();
     registerEvents();
   }
