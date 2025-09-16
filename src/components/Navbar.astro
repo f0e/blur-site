@@ -8,15 +8,12 @@ export interface Route {
 
 interface Props {
   routes: Route[];
-  discordUrl?: string;
-  githubUrl?: string;
 }
 
-const {
-  routes,
-  discordUrl = "https://discord.gg/B5BK9GMN87",
-  githubUrl = "https://github.com/f0e/blur",
-} = Astro.props;
+const { routes } = Astro.props;
+
+const discordUrl = "https://discord.gg/B5BK9GMN87";
+const githubUrl = "https://github.com/f0e/blur";
 
 const longestRouteLength = Math.max(
   ...routes.map((route) => route.label.length)
