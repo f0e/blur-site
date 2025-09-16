@@ -12,11 +12,14 @@ interface Props {
 }
 
 const { routes, class: classes = "" } = Astro.props;
-const currentPath = Astro.url.pathname;
 
 const longestRouteLength = Math.max(
   ...routes.map((route) => route.label.length)
 );
+
+const normalisePath = (path: string) => path.replace(/\/$/, '') || '/';
+
+const currentPath = normalisePath(Astro.url.pathname);
 ---
 
 <nav
@@ -27,7 +30,7 @@ const longestRouteLength = Math.max(
   <ul class="flex flex-col">
     {
       routes.map((link) => {
-        const isActive = link.href === currentPath;
+        const isActive = normalisePath(link.href) === currentPath;
         return (
           <li>
             <a
