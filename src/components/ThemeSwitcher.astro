@@ -46,8 +46,7 @@
     });
   }
 
-  document.addEventListener("astro:after-swap", () => {
-    window.ThemeProvider.applyTheme();
+  document.addEventListener("astro:before-swap", () => {
     init();
   });
 

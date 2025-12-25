@@ -18,13 +18,13 @@ import { ClientRouter } from "astro:transitions";
 
   <script is:inline>
     window.ThemeProvider = (() => {
-      const applyTheme = () => {
-        document.documentElement.classList.toggle(
-          "dark",
-          localStorage.theme === "dark" ||
-            (!("theme" in localStorage) &&
-              window.matchMedia("(prefers-color-scheme: dark)").matches)
-        );
+      const isDarkTheme = () =>
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      const applyTheme = (doc = document) => {
+        doc.documentElement.dataset.theme = isDarkTheme() ? "dark" : "light";
       };
 
       const updateLabel = () => {
@@ -33,6 +33,10 @@ import { ClientRouter } from "astro:transitions";
         const themeLabel = localStorage.theme ?? "system";
         elem.textContent = themeLabel;
       };
+
+      document.addEventListener("astro:before-swap", (event) =>
+        applyTheme(event.newDocument)
+      );
 
       applyTheme();
 
