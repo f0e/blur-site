@@ -13,6 +13,9 @@ interface Props {
 
 const { slides, eager = false } = Astro.props;
 
+// unique per carousel so the dots can link to their slides without js
+const id = `carousel-${Math.random().toString(36).slice(2, 8)}`;
+
 // match the tallest slide's aspect ratio so the height doesn't jump between slides
 const tallest = slides.reduce((a, b) =>
   b.image.height / b.image.width > a.image.height / a.image.width ? b : a,
@@ -42,7 +45,10 @@ const arrowClass = `
     >
       {
         slides.map((slide, index) => (
-          <div class="relative grid min-w-full snap-center place-items-center">
+          <div
+            class="relative grid min-w-full snap-center place-items-center"
+            id={`${id}-${index}`}
+          >
             <Image
               class="not-prose fade-in"
               style={`width: ${slideScale * 100}%`}
@@ -79,16 +85,17 @@ const arrowClass = `
     </div>
   </div>
 
-  <div class="requires-js relative z-10 mt-4 flex justify-center gap-2">
+  <div class="relative z-10 mt-4 flex justify-center gap-2">
     {
       slides.map((_, index) => (
-        <button
+        <a
           class={`
-            size-2 cursor-pointer rounded-full bg-gray-300 transition-all
-            duration-300
-            aria-[current=true]:w-6 aria-[current=true]:bg-black
-            dark:bg-gray-600 dark:aria-[current=true]:bg-white
+            size-2 rounded-full bg-gray-300 transition-all duration-300
+            dark:bg-gray-600
+            js:aria-[current=true]:w-6 js:aria-[current=true]:bg-black
+            dark:js:aria-[current=true]:bg-white
           `}
+          href={`#${id}-${index}`}
           aria-label={`Go to slide ${index + 1}`}
           aria-current={String(index === 0)}
           data-dot
@@ -120,7 +127,12 @@ const arrowClass = `
         next.disabled = active === dots.length - 1;
       };
 
-      dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+      dots.forEach((dot, i) =>
+        dot.addEventListener("click", (e) => {
+          e.preventDefault();
+          goTo(i);
+        }),
+      );
       prev.addEventListener("click", () => goTo(active - 1));
       next.addEventListener("click", () => goTo(active + 1));
       track.addEventListener("scroll", update, { passive: true });

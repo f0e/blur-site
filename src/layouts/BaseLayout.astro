@@ -7,7 +7,16 @@ const { title, description } = Astro.props;
 ---
 
 <!doctype html>
-<html transition:name="root" transition:animate="none" lang="en">
+<!-- scroll padding keeps anchor targets clear of the sticky navbar -->
+<html
+  class={`
+    scroll-pt-24
+    sm:scroll-pt-16
+  `}
+  transition:name="root"
+  transition:animate="none"
+  lang="en"
+>
   <head>
     <CommonHead {title} {description} />
   </head>
