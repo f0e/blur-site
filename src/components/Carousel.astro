@@ -9,14 +9,17 @@ interface Slide {
 interface Props {
   slides: Slide[];
   eager?: boolean;
+  inset?: { top?: number; bottom?: number };
 }
 
-const { slides, eager = false } = Astro.props;
+const { slides, eager = false, inset = {} } = Astro.props;
 
 // match the tallest slide's aspect ratio so the height doesn't jump between slides
 const tallest = slides.reduce((a, b) =>
   b.image.height / b.image.width > a.image.height / a.image.width ? b : a,
 );
+
+const insetMargin = (px = 0) => `${(-px / tallest.image.width) * 100}%`;
 
 const arrowClass = `
   pointer-events-auto size-8 cursor-pointer rounded-full bg-black/50 text-white
@@ -28,7 +31,10 @@ const arrowClass = `
 ---
 
 <blur-carousel class="mb-4 block">
-  <div class="group relative">
+  <div
+    class="group relative"
+    style={`margin-top: ${insetMargin(inset.top)}; margin-bottom: ${insetMargin(inset.bottom)}`}
+  >
     <div
       class={`
         flex snap-x snap-mandatory overflow-x-auto mask-x-from-95%
@@ -76,14 +82,15 @@ const arrowClass = `
     </div>
   </div>
 
-  <div class="mt-4 flex justify-center gap-2">
+  <div class="relative z-10 mt-4 flex justify-center gap-2">
     {
       slides.map((_, index) => (
         <button
           class={`
             size-2 cursor-pointer rounded-full bg-gray-300 transition-all
             duration-300
-            aria-[current=true]:w-6 aria-[current=true]:bg-green-400
+            aria-[current=true]:w-6 aria-[current=true]:bg-black
+            dark:bg-gray-600 dark:aria-[current=true]:bg-white
           `}
           aria-label={`Go to slide ${index + 1}`}
           aria-current={String(index === 0)}
