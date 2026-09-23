@@ -7,6 +7,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://blur.sh",
+
   integrations: [mdx()],
 
   vite: {
@@ -14,4 +16,13 @@ export default defineConfig({
   },
 
   trailingSlash: "never",
+
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "kanagawa-lotus",
+        dark: "kanagawa-dragon",
+      },
+    },
+  },
 });

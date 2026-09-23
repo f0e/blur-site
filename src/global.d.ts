@@ -1,6 +1,7 @@
 export declare global {
-	var ThemeProvider: {
-		applyTheme(): void;
-		updateLabel(): void;
-	};
+  var ThemeProvider: {
+    isDarkTheme(): boolean;
+    applyTheme(): void;
+    updateLabel(): void;
+  };
 }

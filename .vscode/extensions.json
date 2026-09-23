@@ -2,7 +2,9 @@
   "recommendations": [
     "astro-build.astro-vscode",
     "unifiedjs.vscode-mdx",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "biomejs.biome",
+    "esbenp.prettier-vscode"
   ],
   "unwantedRecommendations": []
 }

@@ -1,0 +1,12 @@
+---
+const { class: customClass = "" } = Astro.props;
+---
+
+<body
+  class={`
+    bg-white text-black dark:bg-black dark:text-white
+    transition-[background-color] duration-200
+    ${customClass}`.trim()}
+>
+  <slot />
+</body>

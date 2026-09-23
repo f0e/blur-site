@@ -36,8 +36,10 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
       slides.map((slide, index) => {
         return (
           <div
-            class="snap-start flex-shrink-0 w-full rounded-lg
-              relative flex items-center justify-center overflow-hidden"
+            class={`
+              relative flex w-full flex-shrink-0 snap-start items-center
+              justify-center overflow-hidden rounded-lg
+            `}
             data-slide={index}
           >
             <Image
@@ -48,7 +50,12 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
             />
 
             {slide.caption && (
-              <p class="absolute bottom-0 px-2 bg-black/50 text-white dark:bg-white/50 dark:text-black">
+              <p
+                class={`
+                  absolute bottom-0 bg-black/50 px-2 text-white
+                  dark:bg-white/50 dark:text-black
+                `}
+              >
                 {slide.caption}
               </p>
             )}
@@ -59,11 +66,11 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
   </div>
 
   <!-- Dot indicators -->
-  <div class="flex justify-center mt-4 space-x-2">
+  <div class="mt-4 flex justify-center space-x-2">
     {
       slides.map((_, index) => (
         <button
-          class="w-2 h-2 rounded-full bg-gray-300 cursor-pointer dot"
+          class="dot h-2 w-2 cursor-pointer rounded-full bg-gray-300"
           data-slide={index}
           aria-label={`Go to slide ${index + 1}`}
         />
@@ -71,22 +78,6 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
     }
   </div>
 </div>
-
-<script is:inline>
-  const images = document.querySelectorAll(".fade-in");
-
-  images.forEach((img) => {
-    if (!img.complete || img.naturalWidth === 0) {
-      // not already loaded, fade in
-      img.classList.add("opacity-0");
-
-      img.addEventListener("load", () => {
-        img.classList.add("transition-opacity", "duration-300");
-        img.classList.remove("opacity-0");
-      });
-    }
-  });
-</script>
 
 <script is:inline>
   const ACTIVE_COLOUR = "bg-green-400";

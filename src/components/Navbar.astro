@@ -16,7 +16,7 @@ const discordUrl = "https://discord.gg/B5BK9GMN87";
 const githubUrl = "https://github.com/f0e/blur";
 
 const longestRouteLength = Math.max(
-  ...routes.map((route) => route.label.length)
+  ...routes.map((route) => route.label.length),
 );
 
 const normalisePath = (path: string) => path.replace(/\/$/, "") || "/";
@@ -25,8 +25,11 @@ const currentPath = normalisePath(Astro.url.pathname);
 ---
 
 <nav
-  class="font-mono text-left sm:text-right text-sm not-sm:text-xl
-  shrink-0 flex flex-col gap-4 sm:sticky sm:top-6 self-start"
+  class={`
+    flex shrink-0 flex-col gap-4 self-start text-left font-mono text-sm
+    not-sm:text-xl
+    sm:sticky sm:top-6 sm:text-right
+  `}
   {/* account for bold text getting bigger */}
   style={`width: calc(${longestRouteLength}ch + 5px)`}
 >
@@ -59,10 +62,16 @@ const currentPath = normalisePath(Astro.url.pathname);
       href={discordUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="text-gray-600 hover:text-blue-400"
+      class={`
+        text-gray-600
+        hover:text-blue-400
+      `}
     >
       <svg
-        class="inline w-6 not-sm:w-10"
+        class={`
+          inline w-6
+          not-sm:w-10
+        `}
         viewBox="0 0 24 24"
         fill="currentColor"
       >
@@ -76,10 +85,17 @@ const currentPath = normalisePath(Astro.url.pathname);
       href={githubUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-100"
+      class={`
+        text-gray-600
+        hover:text-gray-900
+        dark:hover:text-gray-100
+      `}
     >
       <svg
-        class="inline w-6 not-sm:w-10"
+        class={`
+          inline w-6
+          not-sm:w-10
+        `}
         viewBox="0 0 24 24"
         fill="currentColor"
       >

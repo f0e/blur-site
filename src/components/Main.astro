@@ -1,4 +1,9 @@
 ---
+import type {
+  TransitionAnimationPair,
+  TransitionDirectionalAnimations,
+} from "astro";
+import Body from "./Body.astro";
 import Navbar from "./Navbar.astro";
 
 const routes = [
@@ -9,7 +14,7 @@ const routes = [
 
 const animDuration = "0.4s";
 
-const anim = {
+const anim: TransitionAnimationPair = {
   old: {
     name: "motion-blur-out",
     duration: animDuration,
@@ -20,24 +25,31 @@ const anim = {
   },
 };
 
-const customTransition = {
+const customTransition: TransitionDirectionalAnimations = {
   forwards: anim,
   backwards: anim,
 };
 ---
 
-<body
-  class="flex flex-col sm:flex-row justify-center gap-10 md:p-8 sm:p-6 p-4 bg-white text-black dark:bg-black dark:text-white transition-[background-color] duration-200"
+<Body
+  class={`
+    flex flex-col justify-center gap-10 p-4
+    sm:flex-row sm:p-6
+    md:p-8
+  `}
 >
   <Navbar routes={routes} />
 
   <main
-    class="prose dark:prose-invert flex-1"
+    class={`
+      prose flex-1
+      dark:prose-invert
+    `}
     transition:animate={customTransition}
   >
     <slot />
   </main>
-</body>
+</Body>
 
 <style>
   :root {
@@ -61,3 +73,21 @@ const customTransition = {
     }
   }
 </style>
+
+<script is:inline>
+  // @TODO: is there a better, more natively Astro way of doing this?
+
+  const images = document.querySelectorAll(".fade-in");
+
+  for (const img of images) {
+    if (!img.complete || img.naturalWidth === 0) {
+      // not already loaded, fade in
+      img.classList.add("opacity-0");
+
+      img.addEventListener("load", () => {
+        img.classList.add("transition-opacity", "duration-300");
+        img.classList.remove("opacity-0");
+      });
+    }
+  }
+</script>

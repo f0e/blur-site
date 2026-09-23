@@ -1,5 +1,10 @@
 ---
 import { ClientRouter } from "astro:transitions";
+
+const defaultDescription =
+  "Blur is an open-source native desktop application made for easily and efficiently adding motion blur to videos through frame blending.";
+
+const { title, description = defaultDescription } = Astro.props;
 ---
 
 <head>
@@ -7,45 +12,67 @@ import { ClientRouter } from "astro:transitions";
 
   <meta name="viewport" content="width=device-width" />
 
-  <link rel="icon" type="image/svg+xml" href="/blur.ico" />
+  <link rel="icon" type="image/x-icon" href="/blur.ico" />
   <meta name="generator" content={Astro.generator} />
 
-  <title>Blur</title>
-  <meta
-    name="description"
-    content="Blur is an open-source native desktop application made for easily and efficiently adding motion blur to videos through frame blending."
-  />
+  <title>{`${title ? `${title} - ` : ""}Blur`}</title>
+  <meta name="description" content={description} />
+
+  <meta property="og:title" content={title ? `${title}` : "Blur"} />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:site_name" content="Blur" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content={description} />
+
+  <meta name="theme-color" content="#05df72" />
 
   <script is:inline>
-    window.ThemeProvider = (() => {
+    globalThis.ThemeProvider = (() => {
       const isDarkTheme = () =>
         localStorage.theme === "dark" ||
         (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches);
+          globalThis.matchMedia("(prefers-color-scheme: dark)").matches);
 
-      const applyTheme = (doc = document) => {
-        doc.documentElement.classList.toggle("dark", isDarkTheme());
+      const applyTheme = (document_ = document) => {
+        document_.documentElement.classList.toggle("dark", isDarkTheme());
+
+        document.dispatchEvent(
+          new CustomEvent("theme-change", {
+            detail: {
+              theme: isDarkTheme() ? "dark" : "light",
+            },
+          }),
+        );
       };
 
       const updateLabel = () => {
-        const elem = document.getElementById("theme-toggle");
-        if (!elem) return;
+        const element = document.querySelector("#theme-toggle");
+        if (!element) return;
         const themeLabel = localStorage.theme ?? "system";
-        elem.textContent = themeLabel;
+        element.textContent = themeLabel;
       };
 
       document.addEventListener("astro:before-swap", (event) =>
-        applyTheme(event.newDocument)
+        applyTheme(event.newDocument),
       );
 
       applyTheme();
 
       return {
+        isDarkTheme,
         applyTheme,
         updateLabel,
       };
     })();
   </script>
+
+  <noscript>
+    <style>
+      .requires-js {
+        display: none;
+      }
+    </style>
+  </noscript>
 
   <ClientRouter />
 </head>

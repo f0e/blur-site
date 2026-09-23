@@ -1,12 +1,14 @@
 [tools]
+biome = "latest"
 bun = "latest"
+hk = "v1.26.0"
 node = "latest"
-"pipx:pre-commit" = "latest"
+pkl = "latest"
 
 [tasks.setup]
 run = """
 bun install
-pre-commit install
+hk install
 """
 
 [tasks.dev]
@@ -17,3 +19,9 @@ run = "bun run astro build"
 
 [tasks.preview]
 run = "bun run astro preview"
+
+[tasks.check]
+run = "bun run check"
+
+[tasks.fix]
+run = "bun run fix"
