@@ -45,13 +45,6 @@ const { title, description = defaultDescription } = Astro.props;
         );
       };
 
-      const updateLabel = () => {
-        const element = document.querySelector("#theme-toggle");
-        if (!element) return;
-        const themeLabel = localStorage.theme ?? "system";
-        element.textContent = themeLabel;
-      };
-
       document.addEventListener("astro:before-swap", (event) =>
         applyTheme(event.newDocument),
       );
@@ -61,7 +54,6 @@ const { title, description = defaultDescription } = Astro.props;
       return {
         isDarkTheme,
         applyTheme,
-        updateLabel,
       };
     })();
   </script>
