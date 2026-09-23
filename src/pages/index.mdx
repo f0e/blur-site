@@ -9,6 +9,7 @@ import DownloadButton from "@components/DownloadButton.astro";
 
 import homeImage from "@assets/home.png";
 import configImage from "@assets/config.png";
+import weightingImage from "@assets/weighting.png";
 import renderImage from "@assets/render.png";
 
 # Blur
@@ -22,11 +23,13 @@ import renderImage from "@assets/render.png";
       image: configImage,
     },
     {
+      image: weightingImage,
+    },
+    {
       image: renderImage,
     },
   ]}
   eager={true}
-  inset={{ top: 33, bottom: 82 }}
 />
 
 Blur is an [open-source](https://github.com/f0e/blur) native desktop application made for easily and efficiently adding motion blur to videos through frame blending, with the ability to utilise frame interpolation and more.

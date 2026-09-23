@@ -9,17 +9,16 @@ interface Slide {
 interface Props {
   slides: Slide[];
   eager?: boolean;
-  inset?: { top?: number; bottom?: number };
 }
 
-const { slides, eager = false, inset = {} } = Astro.props;
+const { slides, eager = false } = Astro.props;
 
 // match the tallest slide's aspect ratio so the height doesn't jump between slides
 const tallest = slides.reduce((a, b) =>
   b.image.height / b.image.width > a.image.height / a.image.width ? b : a,
 );
 
-const insetMargin = (px = 0) => `${(-px / tallest.image.width) * 100}%`;
+const slideScale = 1 - 2 * 0.05; // 5% from mask-x-from-95%, 2x cause theyre on both sides
 
 const arrowClass = `
   pointer-events-auto size-8 cursor-pointer rounded-full bg-black/50 text-white
@@ -31,17 +30,14 @@ const arrowClass = `
 ---
 
 <blur-carousel class="mb-4 block">
-  <div
-    class="group relative"
-    style={`margin-top: ${insetMargin(inset.top)}; margin-bottom: ${insetMargin(inset.bottom)}`}
-  >
+  <div class="group relative">
     <div
       class={`
         flex snap-x snap-mandatory overflow-x-auto mask-x-from-95%
         [scrollbar-width:none]
         motion-safe:scroll-smooth
       `}
-      style={`aspect-ratio: ${tallest.image.width} / ${tallest.image.height}`}
+      style={`aspect-ratio: ${tallest.image.width} / ${tallest.image.height * slideScale}`}
       data-track
     >
       {
@@ -49,6 +45,7 @@ const arrowClass = `
           <div class="relative grid min-w-full snap-center place-items-center">
             <Image
               class="not-prose fade-in"
+              style={`width: ${slideScale * 100}%`}
               src={slide.image}
               alt={slide.caption ?? ""}
               loading={index === 0 && eager ? "eager" : "lazy"}
@@ -71,8 +68,8 @@ const arrowClass = `
 
     <div
       class={`
-        pointer-events-none absolute inset-x-2 top-1/2 flex -translate-y-1/2
-        justify-between
+        requires-js pointer-events-none absolute inset-x-2 top-1/2 flex
+        -translate-y-1/2 justify-between
       `}
     >
       <button class={arrowClass} aria-label="Previous slide" data-prev disabled>
@@ -82,7 +79,7 @@ const arrowClass = `
     </div>
   </div>
 
-  <div class="relative z-10 mt-4 flex justify-center gap-2">
+  <div class="requires-js relative z-10 mt-4 flex justify-center gap-2">
     {
       slides.map((_, index) => (
         <button
