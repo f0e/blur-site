@@ -12,6 +12,11 @@
   font-display: swap;
 }
 
+/* reserve the scrollbar's space so pages short enough not to scroll don't shift sideways */
+html {
+  scrollbar-gutter: stable;
+}
+
 @theme {
   --font-serif: "NV Garamond", "EB Garamond", Garamond, serif;
 }
@@ -96,12 +101,57 @@ h1 {
   }
 }
 
+@property --fade-l {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --fade-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes fade-x-l {
+  from {
+    --fade-l: 0px;
+  }
+
+  to {
+    --fade-l: 1.25rem;
+  }
+}
+
+@keyframes fade-x-r {
+  from {
+    --fade-r: 2rem;
+  }
+
+  to {
+    --fade-r: 0px;
+  }
+}
+
 @utility fade-x {
   mask-image: linear-gradient(to right,
       transparent,
-      black 1.25rem,
-      black calc(100% - 2rem),
+      black var(--fade-l),
+      black calc(100% - var(--fade-r)),
       transparent);
+
+  /* the scroll timeline is inactive when nothing overflows, leaving both at 0 */
+  @supports (animation-timeline: scroll()) {
+    animation: fade-x-l linear both, fade-x-r linear both;
+    animation-timeline: scroll(self inline);
+    animation-range: 0 1.25rem, calc(100% - 2rem) 100%;
+  }
+
+  /* no scroll timelines: fall back to always fading both edges */
+  @supports not (animation-timeline: scroll()) {
+    --fade-l: 1.25rem;
+    --fade-r: 2rem;
+  }
 }
 
 /* slide the navbar's active rail segment between pages */
