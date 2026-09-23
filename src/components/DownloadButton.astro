@@ -6,7 +6,7 @@ const platformLabels = Object.fromEntries(
 );
 ---
 
-<download-button
+<div
   class="not-prose my-6 flex flex-wrap items-center gap-x-4 gap-y-2"
   data-platforms={JSON.stringify(platformLabels)}
 >
@@ -18,11 +18,12 @@ const platformLabels = Object.fromEntries(
       dark:bg-white dark:text-black
     `}
   >
-    Download Blur
+    View downloads
   </a>
 
   <a
     href="/downloads"
+    hidden
     class={`
       text-sm text-gray-500 transition-colors
       hover:text-black
@@ -31,36 +32,35 @@ const platformLabels = Object.fromEntries(
   >
     Other platforms and versions
   </a>
-</download-button>
+</div>
 
-<script>
-  const detectPlatform = () => {
-    const ua = navigator.userAgent;
+<script is:inline>
+  (() => {
+    const el = document.currentScript.previousElementSibling;
 
-    // mobile devices can't run blur, send them to the full list instead
-    if (/Android|iPhone|iPad|iPod/i.test(ua) || navigator.maxTouchPoints > 1)
-      return;
+    const detectPlatform = () => {
+      const ua = navigator.userAgent;
 
-    const platform =
-      (navigator as any).userAgentData?.platform ?? navigator.platform ?? ua;
+      // mobile devices can't run blur, send them to the full list instead
+      if (/Android|iPhone|iPad|iPod/i.test(ua) || navigator.maxTouchPoints > 1)
+        return;
 
-    if (/win/i.test(platform)) return "windows";
-    if (/mac/i.test(platform)) return "macos";
-    if (/linux/i.test(platform)) return "linux";
-  };
+      const platform =
+        navigator.userAgentData?.platform ?? navigator.platform ?? ua;
 
-  class DownloadButton extends HTMLElement {
-    connectedCallback() {
-      const platformId = detectPlatform();
-      if (!platformId) return;
+      if (/win/i.test(platform)) return "windows";
+      if (/mac/i.test(platform)) return "macos";
+      if (/linux/i.test(platform)) return "linux";
+    };
 
-      const labels = JSON.parse(this.dataset.platforms!);
-      const button = this.querySelector("a")!;
+    const platformId = detectPlatform();
+    if (!platformId) return;
 
-      button.href = `/download/${platformId}`;
-      button.textContent = `Download for ${labels[platformId]}`;
-    }
-  }
+    const labels = JSON.parse(el.dataset.platforms);
+    const [button, otherLink] = el.querySelectorAll("a");
 
-  customElements.define("download-button", DownloadButton);
+    button.href = `/download/${platformId}`;
+    button.textContent = `Download for ${labels[platformId]}`;
+    otherLink.hidden = false;
+  })();
 </script>
