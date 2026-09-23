@@ -8,51 +8,50 @@ interface Slide {
 
 interface Props {
   slides: Slide[];
-  eager: boolean;
+  eager?: boolean;
 }
 
-const { slides, eager } = Astro.props;
+const { slides, eager = false } = Astro.props;
 
-const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
+// match the tallest slide's aspect ratio so the height doesn't jump between slides
+const tallest = slides.reduce((a, b) =>
+  b.image.height / b.image.width > a.image.height / a.image.width ? b : a,
+);
+
+const arrowClass = `
+  pointer-events-auto size-8 cursor-pointer rounded-full bg-black/50 text-white
+  opacity-0 transition-opacity
+  group-hover:opacity-100
+  focus-visible:opacity-100
+  disabled:invisible
+`;
 ---
 
-<style>
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-</style>
-
-<div class="mb-4">
-  <div
-    class=`flex overflow-x-auto scroll-smooth snap-x snap-mandatory [-webkit-overflow-scrolling:touch] hide-scrollbar
-    mask-x-from-95% h-[${maxHeight}px]`
-    id="carousel"
-  >
-    {
-      slides.map((slide, index) => {
-        return (
-          <div
-            class={`
-              relative flex w-full flex-shrink-0 snap-start items-center
-              justify-center overflow-hidden rounded-lg
-            `}
-            data-slide={index}
-          >
+<blur-carousel class="mb-4 block">
+  <div class="group relative">
+    <div
+      class={`
+        flex snap-x snap-mandatory overflow-x-auto mask-x-from-95%
+        [scrollbar-width:none]
+        motion-safe:scroll-smooth
+      `}
+      style={`aspect-ratio: ${tallest.image.width} / ${tallest.image.height}`}
+      data-track
+    >
+      {
+        slides.map((slide, index) => (
+          <div class="relative grid min-w-full snap-center place-items-center">
             <Image
               class="not-prose fade-in"
               src={slide.image}
               alt={slide.caption ?? ""}
-              loading={index == 0 && eager ? "eager" : "lazy"}
+              loading={index === 0 && eager ? "eager" : "lazy"}
             />
 
             {slide.caption && (
               <p
                 class={`
-                  absolute bottom-0 bg-black/50 px-2 text-white
+                  absolute bottom-0 m-0 bg-black/50 px-2 text-white
                   dark:bg-white/50 dark:text-black
                 `}
               >
@@ -60,91 +59,69 @@ const maxHeight = Math.max(...slides.map((slide) => slide.image.height));
               </p>
             )}
           </div>
-        );
-      })
-    }
+        ))
+      }
+    </div>
+
+    <div
+      class={`
+        pointer-events-none absolute inset-x-2 top-1/2 flex -translate-y-1/2
+        justify-between
+      `}
+    >
+      <button class={arrowClass} aria-label="Previous slide" data-prev disabled>
+        ‹
+      </button>
+      <button class={arrowClass} aria-label="Next slide" data-next>›</button>
+    </div>
   </div>
 
-  <!-- Dot indicators -->
-  <div class="mt-4 flex justify-center space-x-2">
+  <div class="mt-4 flex justify-center gap-2">
     {
       slides.map((_, index) => (
         <button
-          class="dot h-2 w-2 cursor-pointer rounded-full bg-gray-300"
-          data-slide={index}
+          class={`
+            size-2 cursor-pointer rounded-full bg-gray-300 transition-all
+            duration-300
+            aria-[current=true]:w-6 aria-[current=true]:bg-green-400
+          `}
           aria-label={`Go to slide ${index + 1}`}
+          aria-current={String(index === 0)}
+          data-dot
         />
       ))
     }
   </div>
-</div>
-
-<script is:inline>
-  const ACTIVE_COLOUR = "bg-green-400";
-  const INACTIVE_COLOUR = "bg-gray-300";
-
-  let first = true;
-
-  function updateActiveDot() {
-    const carousel = document.getElementById("carousel");
-    const dots = document.querySelectorAll(".dot");
-
-    if (!first) {
-      // transition if its not the initial update
-      dots.forEach((dot) => dot.classList.add("duration-300"));
-    } else {
-      first = false;
-    }
-
-    if (!carousel) return;
-
-    const scrollLeft = carousel.scrollLeft;
-    const slideWidth = carousel.clientWidth;
-    const activeIndex = Math.round(scrollLeft / slideWidth);
-
-    dots.forEach((dot, index) => {
-      if (index === activeIndex) {
-        dot.classList.add(ACTIVE_COLOUR, "w-6");
-        dot.classList.remove(INACTIVE_COLOUR, "w-2");
-      } else {
-        dot.classList.add(INACTIVE_COLOUR, "w-2");
-        dot.classList.remove(ACTIVE_COLOUR, "w-6");
-      }
-    });
-  }
-
-  updateActiveDot();
-</script>
+</blur-carousel>
 
 <script>
-  declare function updateActiveDot(): void;
+  class BlurCarousel extends HTMLElement {
+    connectedCallback() {
+      const track = this.querySelector<HTMLElement>("[data-track]")!;
+      const prev = this.querySelector<HTMLButtonElement>("[data-prev]")!;
+      const next = this.querySelector<HTMLButtonElement>("[data-next]")!;
+      const dots = [...this.querySelectorAll<HTMLElement>("[data-dot]")];
 
-  let first = true;
+      let active = 0;
 
-  function registerEvents() {
-    const carousel = document.getElementById("carousel");
-    const dots = document.querySelectorAll(".dot");
+      const goTo = (index: number) =>
+        track.scrollTo({ left: index * track.clientWidth });
 
-    dots.forEach((dot, index) => {
-      dot.addEventListener("click", () => {
-        if (!carousel) {
-          return;
-        }
+      const update = () => {
+        active = Math.round(track.scrollLeft / track.clientWidth);
+        dots.forEach((dot, i) =>
+          dot.setAttribute("aria-current", String(i === active)),
+        );
+        prev.disabled = active === 0;
+        next.disabled = active === dots.length - 1;
+      };
 
-        const slideWidth = carousel.clientWidth;
-        carousel.scrollTo({ left: slideWidth * index, behavior: "smooth" });
-      });
-    });
-
-    carousel?.addEventListener("scroll", updateActiveDot);
+      dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+      prev.addEventListener("click", () => goTo(active - 1));
+      next.addEventListener("click", () => goTo(active + 1));
+      track.addEventListener("scroll", update, { passive: true });
+    }
   }
 
-  document.addEventListener("astro:after-swap", () => {
-    registerEvents();
-
-    first = true;
-    updateActiveDot();
-  });
-
-  registerEvents();
+  customElements.define("blur-carousel", BlurCarousel);
 </script>
