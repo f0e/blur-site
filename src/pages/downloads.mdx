@@ -1,0 +1,25 @@
+---
+layout: "@layouts/Layout.astro"
+title: Downloads
+---
+
+import { platforms, releasesUrl } from "@data/downloads";
+
+# Downloads
+
+Latest release:
+
+<ul>
+  {platforms.map((platform) => (
+    <li>
+      <a href={`/download/${platform.id}`}>{platform.label}</a>
+      {platform.description && ` - ${platform.description}`}
+    </li>
+  ))}
+</ul>
+
+## Beta and older versions
+
+Beta releases and all previous versions are available on the [GitHub Releases page](https://github.com/f0e/blur/releases).
+
+To receive beta update notifications you can enable `include beta updates` in your `blur.cfg` found in your config folder.

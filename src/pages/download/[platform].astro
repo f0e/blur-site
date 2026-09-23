@@ -1,0 +1,97 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { platforms, releasesUrl, type Platform } from "@data/downloads";
+
+export const getStaticPaths = () =>
+  platforms.map((platform) => ({
+    params: { platform: platform.id },
+    props: { platform },
+  }));
+
+interface Props {
+  platform: Platform;
+}
+
+const { platform } = Astro.props;
+---
+
+<Layout title={`Download for ${platform.label}`}>
+  <auto-download data-url={platform.url}>
+    <h1>Downloading Blur for {platform.label}...</h1>
+
+    <p>
+      Your download should start automatically. If it didn't, <a
+        href={platform.url}>click here</a
+      >.
+    </p>
+  </auto-download>
+
+  {
+    platform.id === "macos" && (
+      <>
+        <h2>macOS notes</h2>
+
+        <p>
+          After opening on Mac for the first time you'll get a 'Blur is damaged
+          and can't be opened.' error. To fix this, run{" "}
+          <code>xattr -dr com.apple.quarantine /Applications/blur.app</code> in
+          Terminal to unquarantine it.
+        </p>
+
+        <p>
+          The default interpolation program on macOS is RIFE, unlike Windows and
+          Linux. RIFE is more accurate than SVP, but quite a bit slower. The
+          reason for this difference is because using SVP for interpolation on
+          macOS requires that{" "}
+          <a href="https://www.svp-team.com/get/">SVP Manager</a> be running, or
+          you'll get a red border around videos. (This software is paid, and not
+          affiliated with Blur)
+        </p>
+      </>
+    )
+  }
+
+  {
+    platform.id === "linux" && (
+      <>
+        <h2>Linux notes</h2>
+
+        <p>
+          The Linux build requires manual installation of dependencies. See the{" "}
+          <a href="https://github.com/f0e/blur">GitHub repo</a> for details.
+        </p>
+      </>
+    )
+  }
+
+  <h2>Beta releases</h2>
+
+  <p>
+    I often release beta versions with new functionality before I think they're
+    stable enough for a proper release. To test these releases, <a
+      href={releasesUrl}>visit the Releases tab of the repo.</a
+    > To receive beta update notifications you can enable <code
+      >include beta updates</code
+    > in your <code>blur.cfg</code> found in your config folder. Any feedback or issue
+    reporting on these releases is greatly appreciated :)
+  </p>
+
+  <p>
+    Need a different platform or version? See <a href="/downloads"
+      >all downloads</a
+    >.
+  </p>
+</Layout>
+
+<script>
+  class AutoDownload extends HTMLElement {
+    connectedCallback() {
+      // small delay so the page renders before the browser takes over
+      setTimeout(() => {
+        window.location.href = this.dataset.url!;
+      }, 500);
+    }
+  }
+
+  customElements.define("auto-download", AutoDownload);
+</script>

@@ -1,0 +1,66 @@
+---
+import { platforms } from "@data/downloads";
+
+const platformLabels = Object.fromEntries(
+  platforms.map((platform) => [platform.id, platform.label]),
+);
+---
+
+<download-button
+  class="not-prose my-6 flex flex-wrap items-center gap-x-4 gap-y-2"
+  data-platforms={JSON.stringify(platformLabels)}
+>
+  <a
+    href="/downloads"
+    class={`
+      rounded-md bg-black px-5 py-2.5 font-medium text-white transition-opacity
+      hover:opacity-80
+      dark:bg-white dark:text-black
+    `}
+  >
+    Download Blur
+  </a>
+
+  <a
+    href="/downloads"
+    class={`
+      text-sm text-gray-500 transition-colors
+      hover:text-black
+      dark:hover:text-white
+    `}
+  >
+    Other platforms and versions
+  </a>
+</download-button>
+
+<script>
+  const detectPlatform = () => {
+    const ua = navigator.userAgent;
+
+    // mobile devices can't run blur, send them to the full list instead
+    if (/Android|iPhone|iPad|iPod/i.test(ua) || navigator.maxTouchPoints > 1)
+      return;
+
+    const platform =
+      (navigator as any).userAgentData?.platform ?? navigator.platform ?? ua;
+
+    if (/win/i.test(platform)) return "windows";
+    if (/mac/i.test(platform)) return "macos";
+    if (/linux/i.test(platform)) return "linux";
+  };
+
+  class DownloadButton extends HTMLElement {
+    connectedCallback() {
+      const platformId = detectPlatform();
+      if (!platformId) return;
+
+      const labels = JSON.parse(this.dataset.platforms!);
+      const button = this.querySelector("a")!;
+
+      button.href = `/download/${platformId}`;
+      button.textContent = `Download for ${labels[platformId]}`;
+    }
+  }
+
+  customElements.define("download-button", DownloadButton);
+</script>
