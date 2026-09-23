@@ -1,26 +1,50 @@
-<theme-switcher class="requires-js block">
-  <p class="opacity-50">theme</p>
-  <button class="cursor-pointer underline">system</button>
+---
+import { Icon } from "astro-icon/components";
+---
+
+<theme-switcher class="requires-js flex">
+  <button
+    aria-label="theme: system"
+    title="theme: system"
+    class={`
+      -m-1.5 cursor-pointer rounded-md p-1.5 opacity-60
+      hover:bg-gray-500/15 hover:opacity-100
+    `}
+  >
+    <Icon
+      name="lucide:sun-moon"
+      class={`
+        hidden size-4.5
+        in-data-[theme-pref=system]:block
+      `}
+    />
+    <Icon
+      name="lucide:sun"
+      class={`
+        hidden size-4.5
+        in-data-[theme-pref=light]:block
+      `}
+    />
+    <Icon
+      name="lucide:moon"
+      class={`
+        hidden size-4.5
+        in-data-[theme-pref=dark]:block
+      `}
+    />
+  </button>
 </theme-switcher>
 
 <script>
-  /* i'd love to set the label in an inline script so it updates instantly,
-  but that apparently stops the rest of the site from rendering??
-
-  for proof, add this above, reload lots of times and watch the layout shift:
-
-  <script is:inline>
-    // literally nothing
-  < /script>
-  */
   const themes = ["system", "light", "dark"];
 
   class ThemeSwitcher extends HTMLElement {
     connectedCallback() {
       const button = this.querySelector("button")!;
 
-      const render = () =>
-        (button.textContent = localStorage.theme ?? "system");
+      const updateLabel = () =>
+        (button.ariaLabel = button.title =
+          `theme: ${localStorage.theme ?? "system"}`);
 
       button.addEventListener("click", () => {
         const current = localStorage.theme ?? "system";
@@ -30,10 +54,10 @@
         else localStorage.theme = next;
 
         globalThis.ThemeProvider.applyTheme();
-        render();
+        updateLabel();
       });
 
-      render();
+      updateLabel();
     }
   }
 

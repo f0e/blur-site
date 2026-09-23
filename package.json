@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@astrojs/mdx": "4.3.5",
+    "@iconify-json/lucide": "^1.2.136",
     "@tailwindcss/vite": "4.1.13",
     "astro": "5.13.7",
+    "astro-icon": "^1.2.0",
     "tailwindcss": "4.1.13"
   },
   "devDependencies": {

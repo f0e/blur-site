@@ -4,17 +4,21 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --font-mono: "Menlo", monospace;
+@font-face {
+  font-family: "NV Garamond";
+  src: url("/fonts/NV_Garamond-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-mono);
+@theme {
+  --font-serif: "NV Garamond", "EB Garamond", Garamond, serif;
+}
+
+h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
 }
 
 .astro-code {
@@ -47,7 +51,7 @@ h6 {
   }
 }
 
-:not(pre) > code {
+:not(pre)>code {
   font-family: var(--code-font-family);
   font-weight: var(--font-weight-medium);
   font-size: 0.9em;
@@ -58,7 +62,7 @@ h6 {
   .prose h1 {
     color: var(--tw-prose-headings);
     font-size: 2.25em;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   .prose h2 {
@@ -90,4 +94,18 @@ h6 {
     font-size: 1em;
     font-weight: 600;
   }
+}
+
+@utility fade-x {
+  mask-image: linear-gradient(to right,
+      transparent,
+      black 1.25rem,
+      black calc(100% - 2rem),
+      transparent);
+}
+
+/* slide the navbar's active rail segment between pages */
+::view-transition-group(nav-rail) {
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
 }

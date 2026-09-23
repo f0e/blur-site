@@ -12,7 +12,15 @@ const { title, description = defaultDescription } = Astro.props;
 
   <meta name="viewport" content="width=device-width" />
 
-  <link rel="icon" type="image/x-icon" href="/blur.ico" />
+  <link rel="icon" type="image/png" href="/blur.png" />
+  <link rel="apple-touch-icon" href="/blur.png" />
+  <link
+    rel="preload"
+    href="/fonts/NV_Garamond-Regular.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
   <meta name="generator" content={Astro.generator} />
 
   <title>{`${title ? `${title} - ` : ""}Blur`}</title>
@@ -23,6 +31,7 @@ const { title, description = defaultDescription } = Astro.props;
   <meta property="og:site_name" content="Blur" />
   <meta property="og:type" content="website" />
   <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL("/blur.png", Astro.url)} />
 
   <meta name="theme-color" content="#05df72" />
 
@@ -35,6 +44,8 @@ const { title, description = defaultDescription } = Astro.props;
 
       const applyTheme = (document_ = document) => {
         document_.documentElement.classList.toggle("dark", isDarkTheme());
+        document_.documentElement.dataset.themePref =
+          localStorage.theme ?? "system";
 
         document.dispatchEvent(
           new CustomEvent("theme-change", {

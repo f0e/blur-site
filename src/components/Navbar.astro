@@ -1,5 +1,7 @@
 ---
+import { Icon } from "astro-icon/components";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
+import { formatStars, getStars, githubUrl } from "../data/github";
 
 export interface Route {
   href: string;
@@ -13,96 +15,116 @@ interface Props {
 const { routes } = Astro.props;
 
 const discordUrl = "https://discord.gg/B5BK9GMN87";
-const githubUrl = "https://github.com/f0e/blur";
-
-const longestRouteLength = Math.max(
-  ...routes.map((route) => route.label.length),
-);
+const stars = await getStars();
 
 const normalisePath = (path: string) => path.replace(/\/$/, "") || "/";
 
 const currentPath = normalisePath(Astro.url.pathname);
+
+const iconLinkClass = `
+  opacity-60
+  hover:opacity-100
+`;
 ---
 
 <nav
   class={`
-    flex shrink-0 flex-col gap-4 self-start text-left font-mono text-sm
-    not-sm:text-xl
-    sm:sticky sm:top-6 sm:text-right
+    sticky top-0 z-10 border-b border-gray-500/25 bg-white/70 px-4
+    backdrop-blur-md
+    sm:px-6
+    md:px-8
+    dark:bg-black/30
   `}
-  {/* account for bold text getting bigger */}
-  style={`width: calc(${longestRouteLength}ch + 5px)`}
 >
-  <ul class="flex flex-col">
-    {
-      routes.map((link) => {
-        const isActive = normalisePath(link.href) === currentPath;
-        return (
-          <li>
-            <a
-              href={link.href}
-              class={`
-                underline
-                hover:text-green-400/90
-                ${isActive && "font-bold text-green-400"}
-              `}
-            >
-              {link.label}
-            </a>
-          </li>
-        );
-      })
-    }
-  </ul>
+  <div
+    class={`
+      mx-auto flex max-w-prose flex-wrap items-center gap-x-1 pt-3
+      sm:flex-nowrap sm:pt-0
+    `}
+  >
+    <a href="/" class="mr-auto font-serif text-2xl leading-none sm:mr-0">blur</a
+    >
 
-  <ThemeSwitcher />
-
-  <ul>
-    <a
-      href={discordUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+    <ul
       class={`
-        text-gray-600
-        hover:text-blue-400
+        order-last -mx-2.5 flex w-full scroll-px-8 overflow-x-auto fade-x
+        text-sm [scrollbar-width:none]
+        sm:order-0 sm:mx-0 sm:w-auto sm:flex-1 sm:px-5
       `}
     >
-      <svg
-        class={`
-          inline w-6
-          not-sm:w-10
-        `}
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path
-          d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"
-        ></path>
-      </svg>
-    </a>
+      {
+        routes.map((link) => {
+          const isActive = normalisePath(link.href) === currentPath;
+          return (
+            <li>
+              <a
+                href={link.href}
+                data-active={isActive || undefined}
+                class={`
+                  relative block px-2.5 py-4 whitespace-nowrap opacity-60
+                  hover:opacity-100
+                  data-active:opacity-100
+                `}
+              >
+                {link.label}
+                {isActive && (
+                  <span
+                    transition:name="nav-rail"
+                    class={`absolute inset-x-2.5 bottom-0 h-0.5 bg-current`}
+                  />
+                )}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
 
-    <a
-      href={githubUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      class={`
-        text-gray-600
-        hover:text-gray-900
-        dark:hover:text-gray-100
-      `}
-    >
-      <svg
-        class={`
-          inline w-6
-          not-sm:w-10
-        `}
-        viewBox="0 0 24 24"
-        fill="currentColor"
+    <div class="flex items-center gap-3.5">
+      <a
+        href={discordUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Discord"
+        class={iconLinkClass}
       >
-        <path
-          d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-        ></path>
-      </svg>
-    </a>
-  </ul>
+        <Icon name="discord" class="size-4.5" />
+      </a>
+
+      <a
+        href={githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={stars === undefined ? "GitHub" : `GitHub, ${stars} stars`}
+        class={`
+          flex items-center gap-1.5 rounded-full
+          ${stars !== undefined ? "border border-current/25 p-0.5 pr-2" : ""}
+          ${iconLinkClass}
+        `}
+      >
+        <Icon name="github" class="size-4" />
+        {
+          stars !== undefined && (
+            <span class="flex items-center gap-1 text-xs tabular-nums">
+              {formatStars(stars)}
+              <Icon name="lucide:star" class="size-2.5" />
+            </span>
+          )
+        }
+      </a>
+
+      <span class="h-4 w-px bg-gray-500/30"></span>
+
+      <ThemeSwitcher />
+    </div>
+  </div>
 </nav>
+
+<script>
+  const scrollActiveIntoView = () =>
+    document
+      .querySelector("nav a[data-active]")
+      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+
+  document.addEventListener("astro:page-load", scrollActiveIntoView);
+</script>

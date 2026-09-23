@@ -34,22 +34,30 @@ const customTransition: TransitionDirectionalAnimations = {
 
 <Body
   class={`
-    flex flex-col justify-center gap-10 p-4
-    sm:flex-row sm:p-6
-    md:p-8
+    flex flex-col gap-5 pb-20
+    sm:gap-7
+    md:gap-10
   `}
 >
   <Navbar routes={routes} />
 
-  <main
+  <div
     class={`
-      prose flex-1
-      dark:prose-invert
+      px-4
+      sm:px-6
+      md:px-8
     `}
-    transition:animate={customTransition}
   >
-    <slot />
-  </main>
+    <main
+      class={`
+        mx-auto prose
+        dark:prose-invert
+      `}
+      transition:animate={customTransition}
+    >
+      <slot />
+    </main>
+  </div>
 </Body>
 
 <style>
