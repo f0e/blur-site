@@ -17,13 +17,6 @@ const { slides, eager = false } = Astro.props;
 // unique per carousel so the dots can link to their slides without js
 const id = `carousel-${Math.random().toString(36).slice(2, 8)}`;
 
-// match the tallest slide's aspect ratio so the height doesn't jump between slides
-const tallest = slides.reduce((a, b) =>
-  b.image.height / b.image.width > a.image.height / a.image.width ? b : a,
-);
-
-const slideScale = 1 - 2 * 0.05; // 5% from mask-x-from-95%, 2x cause theyre on both sides
-
 const arrowClass = `
   pointer-events-auto grid size-8 cursor-pointer place-items-center rounded-full
   bg-black/50 text-white
@@ -38,24 +31,22 @@ const arrowClass = `
   <div class="group relative">
     <div
       class={`
-        -my-8 box-content flex snap-x snap-mandatory scrollbar-none
-        overflow-x-auto overflow-y-hidden mask-x-from-97% py-8
+        -my-8 flex snap-x snap-mandatory scrollbar-none overflow-x-auto
+        overflow-y-hidden mask-x-from-97% py-8
         motion-safe:scroll-smooth
       `}
-      style={`aspect-ratio: ${tallest.image.width} / ${tallest.image.height * slideScale}`}
       data-track
     >
       {slides.map((slide, index) => (
         <div
           class={`
-            relative grid min-w-full snap-center place-items-center
+            relative grid min-w-full snap-center place-items-center px-15
             drop-shadow-[0_4px_8px_rgb(0_0_0/0.35)]
           `}
           id={`${id}-${index}`}
         >
           <Image
             class="not-prose fade-in"
-            style={`width: ${slideScale * 100}%`}
             src={slide.image}
             alt={slide.caption ?? ""}
             loading={index === 0 && eager ? "eager" : "lazy"}
