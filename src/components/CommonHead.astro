@@ -131,12 +131,5 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     if (event.persisted) history.scrollRestoration = "manual";
   });
 </script>
-<noscript>
-  <style>
-    .requires-js {
-      display: none;
-    }
-  </style>
-</noscript>
 
 <ClientRouter />

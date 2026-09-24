@@ -13,6 +13,10 @@
   font-display: swap;
 }
 
+html:not(.js) .requires-js {
+  display: none;
+}
+
 /* reserve the scrollbar's space so pages short enough not to scroll don't shift sideways */
 html {
   scrollbar-gutter: stable;
