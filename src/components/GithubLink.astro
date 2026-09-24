@@ -1,0 +1,119 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  repo: string; // owner/name
+  class?: string;
+}
+
+const { repo, class: className } = Astro.props;
+---
+
+<a
+  href={`https://github.com/${repo}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="GitHub"
+  data-github-repo={repo}
+  class={`
+    group flex items-center gap-1.5 rounded-full
+    data-stars:border data-stars:border-current/25 data-stars:p-0.5
+    data-stars:pr-2
+    ${className}
+  `}
+>
+  <Icon name="github" class="size-4" />
+  <span
+    class={`
+      hidden items-center gap-1 text-xs tabular-nums
+      group-data-stars:flex
+    `}
+  >
+    <span data-stars-count></span>
+    <Icon name="lucide:star" class="size-2.5" />
+  </span>
+</a>
+
+<script is:inline data-astro-rerun define:vars={{ repo }}>
+  // straight after the link so a cached count is in before first paint
+  globalThis.GithubStars ??= (() => {
+    const stars = new Map();
+
+    const get = (repo) => {
+      if (!stars.has(repo))
+        try {
+          stars.set(repo, JSON.parse(localStorage[`github-stars:${repo}`]));
+        } catch {}
+      return stars.get(repo);
+    };
+
+    const show = (repo) => {
+      const repoStars = get(repo);
+      if (!repoStars) return;
+
+      for (const link of document.querySelectorAll(
+        `[data-github-repo="${repo}"]`,
+      )) {
+        link.dataset.stars = "";
+        link.ariaLabel = `GitHub, ${repoStars.count} stars`;
+        link.querySelector("[data-stars-count]").textContent =
+          repoStars.formatted;
+      }
+    };
+
+    const set = (repo, count, formatted) => {
+      const repoStars = { count, formatted, fetchedAt: Date.now() };
+      stars.set(repo, repoStars);
+      try {
+        localStorage[`github-stars:${repo}`] = JSON.stringify(repoStars);
+      } catch {}
+      show(repo);
+    };
+
+    return { get, set, show };
+  })();
+
+  globalThis.GithubStars.show(repo);
+</script>
+
+<script>
+  const refreshEvery = 30 * 60 * 1000; // 30 min
+
+  const formatStars = (stars: number) =>
+    new Intl.NumberFormat("en", {
+      notation: "compact",
+      maximumFractionDigits: 1,
+    })
+      .format(stars)
+      .toLowerCase();
+
+  const refreshStars = (repo: string) =>
+    fetch(`https://api.github.com/repos/${repo}`, {
+      headers: { Accept: "application/vnd.github+json" },
+    })
+      .then((res) => (res.ok ? res.json() : undefined))
+      .then((data) => {
+        const count = data?.stargazers_count;
+        if (count !== undefined)
+          globalThis.GithubStars.set(repo, count, formatStars(count));
+      })
+      .catch(() => {});
+
+  const refreshStale = () => {
+    const repos = new Set(
+      [...document.querySelectorAll<HTMLElement>("[data-github-repo]")].map(
+        (link) => link.dataset.githubRepo!,
+      ),
+    );
+
+    for (const repo of repos)
+      if (
+        Date.now() - (globalThis.GithubStars.get(repo)?.fetchedAt ?? 0) >
+        refreshEvery
+      )
+        refreshStars(repo);
+  };
+
+  document.addEventListener("astro:page-load", refreshStale);
+  setInterval(refreshStale, 60 * 1000);
+</script>

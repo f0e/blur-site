@@ -1,8 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
 import Container from "./Container.astro";
+import GithubLink from "./GithubLink.astro";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
-import { formatStars, getStars, githubUrl } from "../data/github";
 
 export interface Route {
   href: string;
@@ -16,7 +16,6 @@ interface Props {
 const { routes } = Astro.props;
 
 const discordUrl = "https://discord.gg/B5BK9GMN87";
-const stars = await getStars();
 
 const normalisePath = (path: string) => path.replace(/\/$/, "") || "/";
 
@@ -95,25 +94,7 @@ const iconLinkClass = `
         <Icon name="discord" class="size-4.5" />
       </a>
 
-      <a
-        href={githubUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={stars === undefined ? "GitHub" : `GitHub, ${stars} stars`}
-        class={`
-          flex items-center gap-1.5 rounded-full
-          ${stars !== undefined ? "border border-current/25 p-0.5 pr-2" : ""}
-          ${iconLinkClass}
-        `}
-      >
-        <Icon name="github" class="size-4" />
-        {stars !== undefined && (
-          <span class="flex items-center gap-1 text-xs tabular-nums">
-            {formatStars(stars)}
-            <Icon name="lucide:star" class="size-2.5" />
-          </span>
-        )}
-      </a>
+      <GithubLink repo="f0e/blur" class={iconLinkClass} />
 
       <span class="requires-js h-4 w-px bg-gray-500/30"></span>
 

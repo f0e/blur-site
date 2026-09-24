@@ -5,4 +5,11 @@ export declare global {
     isDarkTheme(): boolean;
     applyTheme(): void;
   };
+  var GithubStars: {
+    get(
+      repo: string,
+    ): { count: number; formatted: string; fetchedAt: number } | undefined;
+    set(repo: string, count: number, formatted: string): void;
+    show(repo: string): void;
+  };
 }
