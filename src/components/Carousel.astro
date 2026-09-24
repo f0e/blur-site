@@ -14,9 +14,6 @@ interface Props {
 
 const { slides, eager = false } = Astro.props;
 
-// unique per carousel so the dots can link to their slides without js
-const id = `carousel-${Math.random().toString(36).slice(2, 8)}`;
-
 const arrowClass = `
   pointer-events-auto grid size-8 cursor-pointer place-items-center rounded-full
   bg-black/50 text-white
@@ -28,13 +25,23 @@ const arrowClass = `
 `;
 ---
 
-<blur-carousel class="mb-4 block">
-  <div class="group relative">
+<blur-carousel class="group relative mb-4 block">
+  <!-- shadow is on the slides without js so the scrollbar doesn't get one. with js it's out here, since chromium
+       sometimes clips shadows inside the masked scroller on reload -->
+  <div
+    class={`
+      -mt-8
+      [mask:linear-gradient(to_right,transparent,black_3%,black_97%,transparent),linear-gradient(black,black)_bottom/100%_1rem_no-repeat]
+      js:-mb-8 js:drop-shadow-[0_4px_8px_rgb(0_0_0/0.35)]
+    `}
+  >
     <div
       class={`
-        -my-8 flex snap-x snap-mandatory scrollbar-none overflow-x-auto
-        overflow-y-hidden mask-x-from-97% py-8
+        flex snap-x snap-mandatory
+        [scrollbar-color:var(--color-gray-500)_transparent] overflow-x-auto
+        overflow-y-hidden py-8
         motion-safe:scroll-smooth
+        js:scrollbar-none
       `}
       data-track
     >
@@ -43,8 +50,8 @@ const arrowClass = `
           class={`
             relative grid min-w-full snap-center place-items-center px-15
             drop-shadow-[0_4px_8px_rgb(0_0_0/0.35)]
+            js:filter-none
           `}
-          id={`${id}-${index}`}
         >
           <Image
             class="not-prose fade-in"
@@ -66,32 +73,32 @@ const arrowClass = `
         </div>
       ))}
     </div>
-
-    <div
-      class={`
-        requires-js pointer-events-none absolute inset-x-2 top-1/2 flex
-        -translate-y-1/2 justify-between
-      `}
-    >
-      <button class={arrowClass} aria-label="Previous slide" data-prev disabled>
-        <Icon name="lucide:chevron-left" class="size-4" />
-      </button>
-      <button class={arrowClass} aria-label="Next slide" data-next>
-        <Icon name="lucide:chevron-right" class="size-4" />
-      </button>
-    </div>
   </div>
 
-  <div class="relative z-10 mt-4 flex justify-center gap-2">
+  <div
+    class={`
+      requires-js pointer-events-none absolute inset-x-2 top-1/2 flex
+      -translate-y-1/2 justify-between
+    `}
+  >
+    <button class={arrowClass} aria-label="Previous slide" data-prev disabled>
+      <Icon name="lucide:chevron-left" class="size-4" />
+    </button>
+    <button class={arrowClass} aria-label="Next slide" data-next>
+      <Icon name="lucide:chevron-right" class="size-4" />
+    </button>
+  </div>
+
+  <div class="requires-js relative z-10 mt-4 flex justify-center gap-2">
     {slides.map((_, index) => (
-      <a
+      <button
         class={`
-          size-2 rounded-full bg-gray-300 transition-all duration-300
+          size-2 cursor-pointer rounded-full bg-gray-300 transition-all
+          duration-300
+          aria-current:w-6 aria-current:bg-black
           dark:bg-gray-600
-          js:aria-current:w-6 js:aria-current:bg-black
-          dark:js:aria-current:bg-white
+          dark:aria-current:bg-white
         `}
-        href={`#${id}-${index}`}
         aria-label={`Go to slide ${index + 1}`}
         aria-current={index === 0 ? "true" : "false"}
         data-dot
@@ -122,12 +129,7 @@ const arrowClass = `
         next.disabled = active === dots.length - 1;
       };
 
-      dots.forEach((dot, i) =>
-        dot.addEventListener("click", (e) => {
-          e.preventDefault();
-          goTo(i);
-        }),
-      );
+      dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
       prev.addEventListener("click", () => goTo(active - 1));
       next.addEventListener("click", () => goTo(active + 1));
       track.addEventListener("scroll", update, { passive: true });
