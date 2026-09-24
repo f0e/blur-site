@@ -38,8 +38,8 @@ const arrowClass = `
   <div class="group relative">
     <div
       class={`
-        flex snap-x snap-mandatory scrollbar-none overflow-x-auto
-        overflow-y-hidden mask-x-from-95%
+        -my-8 box-content flex snap-x snap-mandatory scrollbar-none
+        overflow-x-auto overflow-y-hidden mask-x-from-97% py-8
         motion-safe:scroll-smooth
       `}
       style={`aspect-ratio: ${tallest.image.width} / ${tallest.image.height * slideScale}`}
@@ -47,7 +47,10 @@ const arrowClass = `
     >
       {slides.map((slide, index) => (
         <div
-          class="relative grid min-w-full snap-center place-items-center"
+          class={`
+            relative grid min-w-full snap-center place-items-center
+            drop-shadow-[0_4px_8px_rgb(0_0_0/0.35)]
+          `}
           id={`${id}-${index}`}
         >
           <Image
