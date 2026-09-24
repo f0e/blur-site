@@ -1,0 +1,56 @@
+---
+import { Icon } from "astro-icon/components";
+
+const links = [
+  {
+    href: "https://buymeacoffee.com/tekno",
+    icon: "lucide:coffee",
+    label: "buy me a coffee",
+  },
+  {
+    href: "https://github.com/f0e",
+    icon: "github",
+    label: "f0e",
+    ariaLabel: "f0e on GitHub",
+  },
+];
+---
+
+<footer
+  class={`
+    mt-auto border-t border-gray-500/25 px-4
+    sm:px-6
+    md:px-8
+  `}
+>
+  <div class={`mx-auto flex max-w-prose items-center justify-between py-6`}>
+    <span class="text-sm">
+      <span class="opacity-60">made by</span>{" "}
+      <a
+        href="https://tekno.sh"
+        class={`
+          font-medium underline decoration-current/40 underline-offset-2
+          hover:decoration-current
+        `}
+      >
+        tekno
+      </a>
+    </span>
+
+    <div class="flex items-center gap-4">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          aria-label={link.ariaLabel}
+          class={`
+            flex items-center gap-1.5 text-sm opacity-60
+            hover:opacity-100
+          `}
+        >
+          <Icon name={link.icon} class="size-4" />
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</footer>

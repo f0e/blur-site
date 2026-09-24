@@ -4,6 +4,7 @@ import type {
   TransitionDirectionalAnimations,
 } from "astro";
 import Body from "./Body.astro";
+import Footer from "./Footer.astro";
 import Navbar from "./Navbar.astro";
 
 const routes = [
@@ -34,7 +35,7 @@ const customTransition: TransitionDirectionalAnimations = {
 
 <Body
   class={`
-    flex flex-col gap-7 pb-20
+    flex min-h-dvh flex-col gap-7
     md:gap-10
   `}
 >
@@ -42,7 +43,7 @@ const customTransition: TransitionDirectionalAnimations = {
 
   <div
     class={`
-      px-4
+      px-4 pb-3
       sm:px-6
       md:px-8
     `}
@@ -57,6 +58,8 @@ const customTransition: TransitionDirectionalAnimations = {
       <slot />
     </main>
   </div>
+
+  <Footer />
 </Body>
 
 <style>
