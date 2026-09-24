@@ -148,6 +148,7 @@ h1 {
     animation:
       fade-x-l linear both,
       fade-x-r linear both;
+    animation-duration: auto; /* https://github.com/parcel-bundler/lightningcss/issues/1012 */
     animation-timeline: scroll(self inline);
     animation-range:
       0 1.25rem,
