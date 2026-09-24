@@ -96,7 +96,7 @@ const arrowClass = `
         `}
         href={`#${id}-${index}`}
         aria-label={`Go to slide ${index + 1}`}
-        aria-current={String(index === 0)}
+        aria-current={index === 0 ? "true" : "false"}
         data-dot
       />
     ))}

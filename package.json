@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "hk check --all",
-    "fix": "hk check --all --fix"
+    "fix": "hk fix --all"
   },
   "dependencies": {
     "@astrojs/mdx": "8.0.2",
@@ -19,6 +19,7 @@
     "tailwindcss": "4.3.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@eslint/js": "^10.0.1",
     "@eslint/json": "^2.1.0",
     "@tailwindcss/typography": "0.5.20",
@@ -34,7 +35,7 @@
     "knip": "^6.38.0",
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.0.1",
-    "typescript": "^6.0.3",
+    "typescript": "^6",
     "typescript-eslint": "^8.70.1"
   }
 }
