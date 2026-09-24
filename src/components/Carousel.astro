@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 
 interface Slide {
   image: ImageMetadata;
@@ -24,7 +25,8 @@ const tallest = slides.reduce((a, b) =>
 const slideScale = 1 - 2 * 0.05; // 5% from mask-x-from-95%, 2x cause theyre on both sides
 
 const arrowClass = `
-  pointer-events-auto size-8 cursor-pointer rounded-full bg-black/50 text-white
+  pointer-events-auto grid size-8 cursor-pointer place-items-center rounded-full
+  bg-black/50 text-white
   opacity-0 transition-opacity
   group-hover:opacity-100
   focus-visible:opacity-100
@@ -77,10 +79,10 @@ const arrowClass = `
       `}
     >
       <button class={arrowClass} aria-label="Previous slide" data-prev disabled>
-        ‹
+        <Icon name="lucide:chevron-left" class="size-4" />
       </button>
       <button class={arrowClass} aria-label="Next slide" data-next>
-        ›
+        <Icon name="lucide:chevron-right" class="size-4" />
       </button>
     </div>
   </div>
