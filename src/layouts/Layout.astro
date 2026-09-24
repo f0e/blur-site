@@ -9,6 +9,8 @@ const { title, description } = frontmatter ?? Astro.props;
 ---
 
 <BaseLayout {title} {description}>
+  <slot name="head" slot="head" />
+
   <Main>
     <slot />
   </Main>

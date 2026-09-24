@@ -16,6 +16,11 @@ const { platform } = Astro.props;
 ---
 
 <Layout title={`Download for ${platform.label}`}>
+  <!-- no-js auto download fallback -->
+  <noscript slot="head">
+    <meta http-equiv="refresh" content={`0;url=${platform.url}`} />
+  </noscript>
+
   <auto-download data-url={platform.url}>
     <h1>Downloading Blur for {platform.label}...</h1>
 
@@ -79,10 +84,11 @@ const { platform } = Astro.props;
 <script>
   class AutoDownload extends HTMLElement {
     connectedCallback() {
-      // small delay so the page renders before the browser takes over
-      setTimeout(() => {
-        window.location.href = this.dataset.url!;
-      }, 500);
+      const download = () => (window.location.href = this.dataset.url!);
+
+      if (document.readyState === "complete") download();
+      // wait for load so the download doesn't cut off the rest of the page loading
+      else addEventListener("load", download, { once: true });
     }
   }
 
