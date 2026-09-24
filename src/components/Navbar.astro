@@ -47,43 +47,42 @@ const iconLinkClass = `
       class={`
         mr-auto font-serif text-2xl leading-none
         sm:mr-0
-      `}>blur</a
+      `}
     >
+      blur
+    </a>
 
     <ul
       class={`
-        order-last -mx-2.5 flex w-full fade-x scroll-px-8 overflow-x-auto
-        text-sm
-        [scrollbar-width:none]
+        order-last -mx-2.5 flex w-full fade-x scroll-px-8 scrollbar-none
+        overflow-x-auto text-sm
         sm:order-0 sm:mx-0 sm:w-auto sm:flex-1 sm:px-5
       `}
     >
-      {
-        routes.map((link) => {
-          const isActive = normalisePath(link.href) === currentPath;
-          return (
-            <li>
-              <a
-                href={link.href}
-                data-active={isActive || undefined}
-                class={`
-                  relative block px-2.5 py-4 whitespace-nowrap opacity-60
-                  hover:opacity-100
-                  data-active:opacity-100
-                `}
-              >
-                {link.label}
-                {isActive && (
-                  <span
-                    transition:name="nav-rail"
-                    class={`absolute inset-x-2.5 bottom-0 h-0.5 bg-current`}
-                  />
-                )}
-              </a>
-            </li>
-          );
-        })
-      }
+      {routes.map((link) => {
+        const isActive = normalisePath(link.href) === currentPath;
+        return (
+          <li>
+            <a
+              href={link.href}
+              data-active={isActive || undefined}
+              class={`
+                relative block px-2.5 py-4 whitespace-nowrap opacity-60
+                hover:opacity-100
+                data-active:opacity-100
+              `}
+            >
+              {link.label}
+              {isActive && (
+                <span
+                  transition:name="nav-rail"
+                  class={`absolute inset-x-2.5 bottom-0 h-0.5 bg-current`}
+                />
+              )}
+            </a>
+          </li>
+        );
+      })}
     </ul>
 
     <div class="flex items-center gap-3.5">
@@ -109,14 +108,12 @@ const iconLinkClass = `
         `}
       >
         <Icon name="github" class="size-4" />
-        {
-          stars !== undefined && (
-            <span class="flex items-center gap-1 text-xs tabular-nums">
-              {formatStars(stars)}
-              <Icon name="lucide:star" class="size-2.5" />
-            </span>
-          )
-        }
+        {stars !== undefined && (
+          <span class="flex items-center gap-1 text-xs tabular-nums">
+            {formatStars(stars)}
+            <Icon name="lucide:star" class="size-2.5" />
+          </span>
+        )}
       </a>
 
       <span class="requires-js h-4 w-px bg-gray-500/30"></span>

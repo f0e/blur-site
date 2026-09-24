@@ -11,30 +11,30 @@
     "fix": "hk check --all --fix"
   },
   "dependencies": {
-    "@astrojs/mdx": "4.3.5",
+    "@astrojs/mdx": "8.0.2",
     "@iconify-json/lucide": "^1.2.136",
-    "@tailwindcss/vite": "4.1.13",
-    "astro": "5.13.7",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.3.4",
     "astro-icon": "^1.2.0",
-    "tailwindcss": "4.1.13"
+    "tailwindcss": "4.3.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "@eslint/json": "^0.14.0",
-    "@tailwindcss/typography": "0.5.16",
-    "@typescript-eslint/parser": "^8.51.0",
-    "astro-eslint-parser": "^1.2.2",
-    "eslint": "^9.39.2",
+    "@eslint/js": "^10.0.1",
+    "@eslint/json": "^2.1.0",
+    "@tailwindcss/typography": "0.5.20",
+    "@typescript-eslint/parser": "^8.70.1",
+    "astro-eslint-parser": "^3.1.0",
+    "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-astro": "^1.5.0",
-    "eslint-plugin-better-tailwindcss": "^3.8.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-better-tailwindcss": "^4.7.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "globals": "^16.5.0",
-    "jiti": "^2.6.1",
-    "knip": "^5.79.0",
-    "prettier": "^3.7.4",
-    "prettier-plugin-astro": "^0.14.1",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.51.0"
+    "globals": "^17.12.0",
+    "jiti": "^2.7.0",
+    "knip": "^6.38.0",
+    "prettier": "^3.9.9",
+    "prettier-plugin-astro": "^1.0.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.1"
   }
 }

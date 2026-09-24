@@ -68,7 +68,6 @@ const { title, description = defaultDescription } = Astro.props;
       };
     })();
   </script>
-
   <script is:inline>
     // lets css know js is running (the js: variant)
     document.documentElement.classList.add("js");
@@ -76,7 +75,6 @@ const { title, description = defaultDescription } = Astro.props;
       event.newDocument.documentElement.classList.add("js"),
     );
   </script>
-
   <noscript>
     <style>
       .requires-js {

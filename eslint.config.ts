@@ -5,7 +5,7 @@ import js from "@eslint/js";
 import json from "@eslint/json";
 import prettier from "eslint-config-prettier";
 import astro from "eslint-plugin-astro";
-import astroParser from "astro-eslint-parser";
+import * as astroParser from "astro-eslint-parser";
 import tailwind from "eslint-plugin-better-tailwindcss";
 import tseslint from "typescript-eslint";
 
@@ -55,7 +55,7 @@ export default defineConfig(
       ...tailwind.configs["recommended-warn"].rules,
       // enable all recommended rules to report an error
       ...tailwind.configs["recommended-error"].rules,
-      "better-tailwindcss/no-unregistered-classes": [
+      "better-tailwindcss/no-unknown-classes": [
         "warn",
         {
           ignore: [

@@ -36,40 +36,38 @@ const arrowClass = `
   <div class="group relative">
     <div
       class={`
-        flex snap-x snap-mandatory overflow-x-auto mask-x-from-95%
-        [scrollbar-width:none]
+        flex snap-x snap-mandatory scrollbar-none overflow-x-auto
+        mask-x-from-95%
         motion-safe:scroll-smooth
       `}
       style={`aspect-ratio: ${tallest.image.width} / ${tallest.image.height * slideScale}`}
       data-track
     >
-      {
-        slides.map((slide, index) => (
-          <div
-            class="relative grid min-w-full snap-center place-items-center"
-            id={`${id}-${index}`}
-          >
-            <Image
-              class="not-prose fade-in"
-              style={`width: ${slideScale * 100}%`}
-              src={slide.image}
-              alt={slide.caption ?? ""}
-              loading={index === 0 && eager ? "eager" : "lazy"}
-            />
+      {slides.map((slide, index) => (
+        <div
+          class="relative grid min-w-full snap-center place-items-center"
+          id={`${id}-${index}`}
+        >
+          <Image
+            class="not-prose fade-in"
+            style={`width: ${slideScale * 100}%`}
+            src={slide.image}
+            alt={slide.caption ?? ""}
+            loading={index === 0 && eager ? "eager" : "lazy"}
+          />
 
-            {slide.caption && (
-              <p
-                class={`
-                  absolute bottom-0 m-0 bg-black/50 px-2 text-white
-                  dark:bg-white/50 dark:text-black
-                `}
-              >
-                {slide.caption}
-              </p>
-            )}
-          </div>
-        ))
-      }
+          {slide.caption && (
+            <p
+              class={`
+                absolute bottom-0 m-0 bg-black/50 px-2 text-white
+                dark:bg-white/50 dark:text-black
+              `}
+            >
+              {slide.caption}
+            </p>
+          )}
+        </div>
+      ))}
     </div>
 
     <div
@@ -81,27 +79,27 @@ const arrowClass = `
       <button class={arrowClass} aria-label="Previous slide" data-prev disabled>
         ‹
       </button>
-      <button class={arrowClass} aria-label="Next slide" data-next>›</button>
+      <button class={arrowClass} aria-label="Next slide" data-next>
+        ›
+      </button>
     </div>
   </div>
 
   <div class="relative z-10 mt-4 flex justify-center gap-2">
-    {
-      slides.map((_, index) => (
-        <a
-          class={`
-            size-2 rounded-full bg-gray-300 transition-all duration-300
-            dark:bg-gray-600
-            js:aria-[current=true]:w-6 js:aria-[current=true]:bg-black
-            dark:js:aria-[current=true]:bg-white
-          `}
-          href={`#${id}-${index}`}
-          aria-label={`Go to slide ${index + 1}`}
-          aria-current={String(index === 0)}
-          data-dot
-        />
-      ))
-    }
+    {slides.map((_, index) => (
+      <a
+        class={`
+          size-2 rounded-full bg-gray-300 transition-all duration-300
+          dark:bg-gray-600
+          js:aria-current:w-6 js:aria-current:bg-black
+          dark:js:aria-current:bg-white
+        `}
+        href={`#${id}-${index}`}
+        aria-label={`Go to slide ${index + 1}`}
+        aria-current={String(index === 0)}
+        data-dot
+      />
+    ))}
   </div>
 </blur-carousel>
 
