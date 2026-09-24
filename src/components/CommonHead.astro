@@ -5,6 +5,8 @@ const defaultDescription =
   "Blur is an open-source native desktop application made for easily and efficiently adding motion blur to videos through frame blending.";
 
 const { title, description = defaultDescription } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <meta charset="UTF-8" />
@@ -26,7 +28,9 @@ const { title, description = defaultDescription } = Astro.props;
 <meta name="description" content={description} />
 
 <meta property="og:title" content={title ? `${title}` : "Blur"} />
-<meta property="og:url" content={Astro.url} />
+<link rel="canonical" href={canonicalUrl} />
+
+<meta property="og:url" content={canonicalUrl} />
 <meta property="og:site_name" content="Blur" />
 <meta property="og:type" content="website" />
 <meta property="og:description" content={description} />
