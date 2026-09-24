@@ -44,14 +44,13 @@ import { Icon } from "astro-icon/components";
 
       const updateLabel = () =>
         (button.ariaLabel = button.title =
-          `theme: ${localStorage.theme ?? "system"}`);
+          `theme: ${globalThis.ThemeProvider.getPreference()}`);
 
       button.addEventListener("click", () => {
-        const current = localStorage.theme ?? "system";
+        const current = globalThis.ThemeProvider.getPreference();
         const next = themes[(themes.indexOf(current) + 1) % themes.length];
 
-        if (next === "system") localStorage.removeItem("theme");
-        else localStorage.theme = next;
+        globalThis.ThemeProvider.setPreference(next);
 
         globalThis.ThemeProvider.applyTheme();
         updateLabel();
