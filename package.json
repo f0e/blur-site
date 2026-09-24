@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "8.0.2",
+    "@astrojs/sitemap": "3.7.4",
     "@iconify-json/lucide": "^1.2.136",
     "@tailwindcss/vite": "4.3.3",
     "astro": "7.3.4",
