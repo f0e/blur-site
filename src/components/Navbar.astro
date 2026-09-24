@@ -54,6 +54,7 @@ const iconLinkClass = `
       class={`
         order-last -mx-2.5 flex w-full fade-x scroll-px-8 scrollbar-none
         overflow-x-auto text-sm
+        motion-safe:scroll-smooth
         sm:order-0 sm:mx-0 sm:w-auto sm:flex-1 sm:pr-5 sm:pl-1
       `}
     >
@@ -122,10 +123,34 @@ const iconLinkClass = `
 </nav>
 
 <script>
-  const scrollActiveIntoView = () =>
-    document
-      .querySelector("nav a[data-active]")
-      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  // the swap replaces the navbar, so carry the list's scroll over to stop it
+  // resetting to the start before scrolling to the active link
+  let listScroll = 0;
 
-  document.addEventListener("astro:page-load", scrollActiveIntoView);
+  document.addEventListener("astro:before-swap", () => {
+    listScroll = document.querySelector("nav ul")?.scrollLeft ?? 0;
+  });
+
+  document.addEventListener("astro:after-swap", () =>
+    document
+      .querySelector("nav ul")
+      ?.scrollTo({ left: listScroll, behavior: "instant" }),
+  );
+
+  document.addEventListener("astro:page-load", () => {
+    const link = document.querySelector("nav a[data-active]");
+    const list = link?.closest("ul");
+    if (!link || !list) return;
+
+    const { scrollPaddingLeft, scrollPaddingRight } = getComputedStyle(list);
+    const linkRect = link.getBoundingClientRect();
+    const listRect = list.getBoundingClientRect();
+    const left = listRect.left + parseFloat(scrollPaddingLeft);
+    const right = listRect.right - parseFloat(scrollPaddingRight);
+
+    list.scrollBy({
+      left:
+        Math.min(0, linkRect.left - left) + Math.max(0, linkRect.right - right),
+    });
+  });
 </script>
