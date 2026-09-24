@@ -7,81 +7,79 @@ const defaultDescription =
 const { title, description = defaultDescription } = Astro.props;
 ---
 
-<head>
-  <meta charset="UTF-8" />
+<meta charset="UTF-8" />
 
-  <meta name="viewport" content="width=device-width" />
+<meta name="viewport" content="width=device-width" />
 
-  <link rel="icon" type="image/png" href="/blur.png" />
-  <link rel="apple-touch-icon" href="/blur.png" />
-  <link
-    rel="preload"
-    href="/fonts/NV_Garamond-Regular.woff2"
-    as="font"
-    type="font/woff2"
-    crossorigin
-  />
-  <meta name="generator" content={Astro.generator} />
+<link rel="icon" type="image/png" href="/blur.png" />
+<link rel="apple-touch-icon" href="/blur.png" />
+<link
+  rel="preload"
+  href="/fonts/NV_Garamond-Regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<meta name="generator" content={Astro.generator} />
 
-  <title>{`${title ? `${title} - ` : ""}Blur`}</title>
-  <meta name="description" content={description} />
+<title>{`${title ? `${title} - ` : ""}Blur`}</title>
+<meta name="description" content={description} />
 
-  <meta property="og:title" content={title ? `${title}` : "Blur"} />
-  <meta property="og:url" content={Astro.url} />
-  <meta property="og:site_name" content="Blur" />
-  <meta property="og:type" content="website" />
-  <meta property="og:description" content={description} />
-  <meta property="og:image" content={new URL("/blur.png", Astro.url)} />
+<meta property="og:title" content={title ? `${title}` : "Blur"} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:site_name" content="Blur" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL("/blur.png", Astro.url)} />
 
-  <meta name="theme-color" content="#05df72" />
+<meta name="theme-color" content="#05df72" />
 
-  <script is:inline>
-    globalThis.ThemeProvider = (() => {
-      const isDarkTheme = () =>
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-          globalThis.matchMedia("(prefers-color-scheme: dark)").matches);
+<script is:inline>
+  globalThis.ThemeProvider = (() => {
+    const isDarkTheme = () =>
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        globalThis.matchMedia("(prefers-color-scheme: dark)").matches);
 
-      const applyTheme = (document_ = document) => {
-        document_.documentElement.classList.toggle("dark", isDarkTheme());
-        document_.documentElement.dataset.themePref =
-          localStorage.theme ?? "system";
+    const applyTheme = (document_ = document) => {
+      document_.documentElement.classList.toggle("dark", isDarkTheme());
+      document_.documentElement.dataset.themePref =
+        localStorage.theme ?? "system";
 
-        document.dispatchEvent(
-          new CustomEvent("theme-change", {
-            detail: {
-              theme: isDarkTheme() ? "dark" : "light",
-            },
-          }),
-        );
-      };
-
-      document.addEventListener("astro:before-swap", (event) =>
-        applyTheme(event.newDocument),
+      document.dispatchEvent(
+        new CustomEvent("theme-change", {
+          detail: {
+            theme: isDarkTheme() ? "dark" : "light",
+          },
+        }),
       );
+    };
 
-      applyTheme();
-
-      return {
-        isDarkTheme,
-        applyTheme,
-      };
-    })();
-  </script>
-  <script is:inline>
-    // lets css know js is running (the js: variant)
-    document.documentElement.classList.add("js");
     document.addEventListener("astro:before-swap", (event) =>
-      event.newDocument.documentElement.classList.add("js"),
+      applyTheme(event.newDocument),
     );
-  </script>
-  <noscript>
-    <style>
-      .requires-js {
-        display: none;
-      }
-    </style>
-  </noscript>
 
-  <ClientRouter />
-</head>
+    applyTheme();
+
+    return {
+      isDarkTheme,
+      applyTheme,
+    };
+  })();
+</script>
+<script is:inline>
+  // lets css know js is running (the js: variant)
+  document.documentElement.classList.add("js");
+  document.addEventListener("astro:before-swap", (event) =>
+    event.newDocument.documentElement.classList.add("js"),
+  );
+</script>
+<noscript>
+  <style>
+    .requires-js {
+      display: none;
+    }
+  </style>
+</noscript>
+
+<ClientRouter />
