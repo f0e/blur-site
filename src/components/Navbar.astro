@@ -42,13 +42,19 @@ const iconLinkClass = `
       sm:flex-nowrap sm:pt-0
     `}
   >
-    <a href="/" class="mr-auto font-serif text-2xl leading-none sm:mr-0">blur</a
+    <a
+      href="/"
+      class={`
+        mr-auto font-serif text-2xl leading-none
+        sm:mr-0
+      `}>blur</a
     >
 
     <ul
       class={`
-        order-last -mx-2.5 flex w-full scroll-px-8 overflow-x-auto fade-x
-        text-sm [scrollbar-width:none]
+        order-last -mx-2.5 flex w-full fade-x scroll-px-8 overflow-x-auto
+        text-sm
+        [scrollbar-width:none]
         sm:order-0 sm:mx-0 sm:w-auto sm:flex-1 sm:px-5
       `}
     >

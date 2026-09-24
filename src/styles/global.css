@@ -57,7 +57,7 @@ h1 {
   }
 }
 
-:not(pre)>code {
+:not(pre) > code {
   font-family: var(--code-font-family);
   font-weight: var(--font-weight-medium);
   font-size: 0.9em;
@@ -135,17 +135,23 @@ h1 {
 }
 
 @utility fade-x {
-  mask-image: linear-gradient(to right,
-      transparent,
-      black var(--fade-l),
-      black calc(100% - var(--fade-r)),
-      transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--fade-l),
+    black calc(100% - var(--fade-r)),
+    transparent
+  );
 
   /* the scroll timeline is inactive when nothing overflows, leaving both at 0 */
   @supports (animation-timeline: scroll()) {
-    animation: fade-x-l linear both, fade-x-r linear both;
+    animation:
+      fade-x-l linear both,
+      fade-x-r linear both;
     animation-timeline: scroll(self inline);
-    animation-range: 0 1.25rem, calc(100% - 2rem) 100%;
+    animation-range:
+      0 1.25rem,
+      calc(100% - 2rem) 100%;
   }
 
   /* no scroll timelines: fall back to always fading both edges */
