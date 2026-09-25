@@ -117,8 +117,15 @@ const arrowClass = `
       const prev = this.querySelector<HTMLButtonElement>("[data-prev]")!;
       const next = this.querySelector<HTMLButtonElement>("[data-next]")!;
       const dots = [...this.querySelectorAll<HTMLElement>("[data-dot]")];
+      const images = [...track.querySelectorAll<HTMLImageElement>("img")];
 
       let active = 0;
+
+      // images are lazy, so once the current slide has loaded, start loading its neighbours
+      const preloadAround = (index: number) => {
+        for (const image of images.slice(Math.max(index - 1, 0), index + 2))
+          image.loading = "eager";
+      };
 
       const goTo = (index: number) =>
         track.scrollTo({ left: index * track.clientWidth });
@@ -130,12 +137,19 @@ const arrowClass = `
         );
         prev.disabled = active === 0;
         next.disabled = active === dots.length - 1;
+        preloadAround(active);
       };
 
       dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
       prev.addEventListener("click", () => goTo(active - 1));
       next.addEventListener("click", () => goTo(active + 1));
       track.addEventListener("scroll", update, { passive: true });
+
+      if (images[0].complete) preloadAround(0);
+      else
+        images[0].addEventListener("load", () => preloadAround(active), {
+          once: true,
+        });
     }
   }
 
