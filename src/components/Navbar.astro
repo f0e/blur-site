@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
+import logo from "@assets/blur.png";
 import Container from "./Container.astro";
 import GithubLink from "./GithubLink.astro";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
@@ -47,7 +49,14 @@ const iconLinkClass = `
         sm:mr-0
       `}
     >
-      <img src="/blur.png" alt="blur" class="size-8" />
+      <Image
+        src={logo}
+        alt="blur"
+        width={32}
+        densities={[1, 2]}
+        class="size-8"
+        loading="eager"
+      />
     </a>
 
     <ul

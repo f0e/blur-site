@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import { Icon } from "astro-icon/components";
 
 interface Slide {
@@ -53,9 +53,12 @@ const arrowClass = `
             js:filter-none
           `}
         >
-          <Image
-            class="not-prose fade-in"
+          <Picture
+            class="fade-in"
+            pictureAttributes={{ class: "not-prose" }}
             src={slide.image}
+            formats={["avif"]}
+            fallbackFormat="webp"
             alt={slide.caption ?? ""}
             loading={index === 0 && eager ? "eager" : "lazy"}
           />
